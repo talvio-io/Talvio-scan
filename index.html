@@ -556,7 +556,7 @@
       <div class="topbar">
         <div class="brand"><svg class="mark" width="22" height="22" viewBox="0 0 200 200" aria-hidden="true"><g stroke="rgba(207,250,254,.4)" stroke-width="5" stroke-linejoin="round"><polygon points="100,10 52,54 73,76 100,50" fill="#a5f3fc"/><polygon points="100,10 100,50 127,76 148,54" fill="#67e8f9"/><polygon points="52,54 73,76 73,124 52,146" fill="#0e7490"/><polygon points="148,54 127,76 127,124 148,146" fill="#0891b2"/><polygon points="52,146 73,124 100,150 100,190" fill="#164e63"/><polygon points="148,146 127,124 100,150 100,190" fill="#155e75"/></g><polygon points="100,50 127,76 127,124 100,150 73,124 73,76" fill="#cffafe"/></svg>TALVIO&nbsp;SCAN</div>
         <span class="utc-clock" title="Coordinated Universal Time — every round runs on this clock"><b id="utcClock">--:--:--</b> UTC</span>
-        <span class="deploy-flag" id="deployFlag">NOT DEPLOYED YET</span>
+        <span class="deploy-flag live" id="deployFlag">DEPLOYED · LIVE</span>
         <nav class="topnav" aria-label="Sections">
           <a class="nav-cta" href="#live">Live Round</a>
           <a href="#scan">Scan</a>
@@ -664,7 +664,7 @@
             <div class="lm-cell"><div class="k">Claims for this round open in</div><div class="v" id="lmClaimIn">--:--:--</div><div class="s" id="lmClaimAt">—</div></div>
             <div class="lm-cell"><div class="k">Previous round claims open</div><div class="v gd" id="lmPrevIn">--:--:--</div><div class="s" id="lmPrevAt">—</div></div>
           </div>
-          <p class="lm-note" id="lmNote">The round clock above is <b>real and running right now</b> — it never stops, deployed or not. Minting switches on at deploy; the schedule you see is the schedule the contracts will run.</p>
+          <p class="lm-note" id="lmNote">The round clock above is <b>real and running right now</b> — it never stops. The contracts are live on BNB Chain, and the schedule you see is the schedule they run.</p>
         </div>
       </div>
 
@@ -705,7 +705,7 @@
             <h4>Your demo scans — this visit</h4>
             <div id="demoLogRows"></div>
           </div>
-          <p class="demo-note">Demo only — the Orb above is a picture, not an NFT. Real scans open at deploy.</p>
+          <p class="demo-note">Demo only — the Orb above is a picture, not an NFT. Real scans are live in the Scan section below.</p>
         </div>
       </div>
 
@@ -733,7 +733,7 @@
             <span class="price-note" id="modeNote">0 BNB — uses your free scan for this round.</span>
           </div>
           <div class="row" style="margin-top:18px">
-            <button class="btn" id="btnScan" type="button" disabled>Scan — Not Deployed Yet</button>
+            <button class="btn" id="btnScan" type="button" disabled>Connect Wallet First</button>
             <span class="price-note" id="scanLeftNote"></span>
           </div>
           <div class="status-line" id="scanStatus" role="status"></div>
@@ -794,7 +794,7 @@
           <div class="row">
             <input class="field" id="claimTokenId" type="number" min="1" step="1" inputmode="numeric" placeholder="Orb Nº — e.g. 12" aria-label="Scan Orb token number to claim" style="max-width:220px" />
             <button class="btn ghost" id="btnPreview" type="button">Check Claim</button>
-            <button class="btn gold" id="btnClaim" type="button" disabled>Claim — Not Deployed Yet</button>
+            <button class="btn gold" id="btnClaim" type="button" disabled>Claim $SCAN</button>
           </div>
           <div class="status-line" id="claimStatus" role="status">Enter an Orb number to see its claim amount, fee, and opening time. You can also claim straight from My Scans.</div>
         </div>
@@ -814,9 +814,9 @@
       <section id="agent">
         <div class="sec-head"><span class="sec-num">05</span><h2>AGENT PROMPT</h2></div>
         <p class="sec-desc">Built for agents. Paste this to yours — it scans and claims for you.</p>
-        <div class="prompt-box" id="promptText">Scan Talvio Scan for me now: call scan() on the Talvio Scan NFT — free if my free scan is left this round, otherwise paid at 0.002 BNB.
+        <div class="prompt-box" id="promptText">On BNB Chain (chain 56), scan Talvio Scan for me now: call scan() on the Talvio Scan NFT at 0x7De1Ee0E8E2228D2b7826dE5c9A330Bf8107372C — free if my free scan is left this round, otherwise paid at 0.002 BNB.
 Stay within my limit of 10 scans this round and report each tx hash and Orb number.
-When a round has sealed and its claim is open (8 hours after the round ends), call claim(orbNumber) on the Talvio Scan claim contract with the exact fee from preview().
+When a round has sealed and its claim is open (8 hours after the round ends), call claim(orbNumber) on the Talvio Scan claim contract at 0xc64a804CB03019d9e438B4e1B0Dd5d0f3dC13a7a with the exact fee from preview().
 Report how much $SCAN I received for each claim.</div>
         <div class="row" style="margin-top:14px">
           <button class="btn ghost" id="btnCopyPrompt" type="button">Copy Prompt</button>
@@ -923,13 +923,13 @@ Report how much $SCAN I received for each claim.</div>
       <!-- LEADERBOARD + ACTIVITY -->
       <section id="board">
         <div class="sec-head"><span class="sec-num">09</span><h2>ON THE BOARD</h2></div>
-        <p class="sec-desc" id="boardDesc">Top scanners and the latest Orbs, read straight from the chain. Empty for now — the first names land at launch.</p>
+        <p class="sec-desc" id="boardDesc">Top scanners and the latest Orbs, read straight from the chain — refreshed every two minutes.</p>
 
         <div class="board">
           <div class="board-card">
             <h3><span class="live-dot" aria-hidden="true"></span>Top scanners this round</h3>
             <div id="lbBody">
-            <p class="board-empty">No scans yet — the board fills from the first scan after deploy. <b>Be the first name here.</b></p>
+            <p class="board-empty">No scans yet — the board fills from the first scan. <b>Be the first name here.</b></p>
             <p class="board-empty" style="padding-top:2px">The round clock is already live: the current round window and seal time are ticking in the monitor at the top of this page.</p>
             </div>
           </div>
@@ -951,8 +951,8 @@ Report how much $SCAN I received for each claim.</div>
         <div class="sec-head"><span class="sec-num">10</span><h2>ROADMAP</h2></div>
         <p class="sec-desc">Four steps, in order. No dates promised — each step ships when it's ready and verified.</p>
         <div class="road">
-          <div class="road-step"><div class="rn">STEP 1</div><h3>Deploy contracts</h3><p>$SCAN, the Scan NFT and the claim contract go live on BNB Chain — built and tested, waiting on the deploy call.</p><span class="rstat">UP NEXT</span></div>
-          <div class="road-step"><div class="rn">STEP 2</div><h3>Launch scans</h3><p>The first rounds open, the first Orbs mint, and the board starts filling with real scanners.</p><span class="rstat later">AFTER DEPLOY</span></div>
+          <div class="road-step"><div class="rn">STEP 1</div><h3>Deploy contracts</h3><p>$SCAN, the Scan NFT and the claim contract are live on BNB Chain — deployed, verified, and the claim pool is funded with 6B $SCAN.</p><span class="rstat">DONE</span></div>
+          <div class="road-step"><div class="rn">STEP 2</div><h3>Launch scans</h3><p>Rounds are open, the first Orbs mint, and the board fills with real scanners.</p><span class="rstat">LIVE NOW</span></div>
           <div class="road-step"><div class="rn">STEP 3</div><h3>LP pairing</h3><p>The 3B $SCAN liquidity reserve pairs with BNB so $SCAN becomes tradable. A later decision, made on its own — not bundled into launch.</p><span class="rstat later">LATER DECISION</span></div>
           <div class="road-step"><div class="rn">STEP 4</div><h3>Claims + listing</h3><p>Sealed rounds start paying out claims, and $SCAN heads for wider listing once trading is live.</p><span class="rstat later">AFTER PAIRING</span></div>
         </div>
@@ -1001,11 +1001,11 @@ Report how much $SCAN I received for each claim.</div>
       <!-- CONTRACTS -->
       <section id="contracts">
         <div class="sec-head"><span class="sec-num">12</span><h2>CONTRACTS</h2></div>
-        <p class="sec-desc" id="contractDesc">Built. Tested. Not deployed yet — the moment they go live, the addresses land here and on BscScan.</p>
+        <p class="sec-desc" id="contractDesc">All three contracts are live on BNB Chain. Verify them on BscScan:</p>
         <div class="contract-list">
-          <div class="contract-row"><span class="cname">$SCAN Token</span><span class="caddr" id="addrToken">Not deployed yet</span></div>
-          <div class="contract-row"><span class="cname">Scan NFT (TSCAN)</span><span class="caddr" id="addrNft">Not deployed yet</span></div>
-          <div class="contract-row"><span class="cname">Claim</span><span class="caddr" id="addrClaim">Not deployed yet</span></div>
+          <div class="contract-row"><span class="cname">$SCAN Token</span><span class="caddr" id="addrToken"><a href="https://bscscan.com/address/0xFE44AeF7bD6a7EdEAF3A35a8B57028ee2DB084ab" target="_blank" rel="noopener">0xFE44AeF7bD6a7EdEAF3A35a8B57028ee2DB084ab</a></span></div>
+          <div class="contract-row"><span class="cname">Scan NFT (TSCAN)</span><span class="caddr" id="addrNft"><a href="https://bscscan.com/address/0x7De1Ee0E8E2228D2b7826dE5c9A330Bf8107372C" target="_blank" rel="noopener">0x7De1Ee0E8E2228D2b7826dE5c9A330Bf8107372C</a></span></div>
+          <div class="contract-row"><span class="cname">Claim</span><span class="caddr" id="addrClaim"><a href="https://bscscan.com/address/0xc64a804CB03019d9e438B4e1B0Dd5d0f3dC13a7a" target="_blank" rel="noopener">0xc64a804CB03019d9e438B4e1B0Dd5d0f3dC13a7a</a></span></div>
           <div class="contract-row"><span class="cname">Supply</span><span class="caddr">10,000,000,000 $SCAN · 6B claim pool · 3B LP · 1B owner</span></div>
         </div>
       </section>
@@ -1013,7 +1013,7 @@ Report how much $SCAN I received for each claim.</div>
       <!-- COMMUNITY -->
       <section id="community">
         <div class="sec-head"><span class="sec-num">13</span><h2>THE SIGNAL</h2></div>
-        <p class="sec-desc">Launch is announced on X first — the deploy, the first round, the first Orbs. Follow now and be there for scan Nº 1.</p>
+        <p class="sec-desc">The launch is announced on X first — the first rounds, the first Orbs, the first Royals. Follow now and be there for scan Nº 1.</p>
         <div class="card">
           <div class="row" style="justify-content:space-between">
             <div>
@@ -1023,8 +1023,8 @@ Report how much $SCAN I received for each claim.</div>
             <a class="btn" href="https://x.com/Talviochain" target="_blank" rel="noopener" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center">Follow for the Launch</a>
           </div>
           <div class="launch-steps">
-            <div class="lstep"><span class="ln">NEXT · 1</span><h3>Deploy</h3><p>$SCAN, the Scan NFT and the claim contract go live on BNB Chain.</p></div>
-            <div class="lstep"><span class="ln">NEXT · 2</span><h3>First rounds</h3><p>Rounds open — 500 free scans per round, first come first served.</p></div>
+            <div class="lstep"><span class="ln">DONE · 1</span><h3>Deploy</h3><p>$SCAN, the Scan NFT and the claim contract are live on BNB Chain.</p></div>
+            <div class="lstep"><span class="ln">LIVE · 2</span><h3>Rounds open</h3><p>Rounds are running — 500 free scans per round, first come first served.</p></div>
             <div class="lstep"><span class="ln">NEXT · 3</span><h3>First claims</h3><p>The first round seals when it ends. Claims open 8 hours later — and never expire.</p></div>
           </div>
         </div>
@@ -1056,14 +1056,14 @@ Report how much $SCAN I received for each claim.</div>
     <script>
     "use strict";
     /* ============================================================
-       CONTRACT ADDRESSES — placeholders until deployment.
-       Contracts are built + tested but NOT deployed yet.
-       Paste the real addresses here after deploy and every
-       button, counter and BscScan link below switches on.
+       CONTRACT ADDRESSES — deployed and verified on BNB Chain.
+       Token "Talvio Scan" (SCAN, 10B supply) · NFT "Talvio Scan"
+       (TSCAN) · claim contract (token()/nft() point at the two
+       above; claim pool funded with exactly 6B $SCAN).
        ============================================================ */
-    var SCAN_TOKEN_ADDR = "0x0000000000000000000000000000000000000000";
-    var SCAN_NFT_ADDR   = "0x0000000000000000000000000000000000000000";
-    var SCAN_CLAIM_ADDR = "0x0000000000000000000000000000000000000000";
+    var SCAN_TOKEN_ADDR = "0xFE44AeF7bD6a7EdEAF3A35a8B57028ee2DB084ab";
+    var SCAN_NFT_ADDR   = "0x7De1Ee0E8E2228D2b7826dE5c9A330Bf8107372C";
+    var SCAN_CLAIM_ADDR = "0xc64a804CB03019d9e438B4e1B0Dd5d0f3dC13a7a";
     var AGENT_REGISTRY  = "0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F"; // Binance Agent ID registry
 
     var ZERO = "0x0000000000000000000000000000000000000000";
@@ -1383,7 +1383,7 @@ Report how much $SCAN I received for each claim.</div>
     function applyDeployState(){
       var flag = $("deployFlag");
       if (DEPLOYED){
-        flag.textContent = "LIVE ON BNB CHAIN";
+        flag.textContent = "DEPLOYED · LIVE";
         flag.classList.add("live");
         $("btnScan").textContent = "Scan Now";
         $("btnClaim").textContent = "Claim $SCAN";
