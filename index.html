@@ -381,55 +381,6 @@
       }
       @keyframes secSweep{0%{left:-150px}55%{left:100%}100%{left:100%}}
 
-      /* ---------- demo scan ---------- */
-      .demo{margin-top:38px;scroll-margin-top:150px}
-      .demo-tally{color:var(--faint);font-size:.9rem;margin:12px auto 0;line-height:1.6}
-      .demo-tally b{color:var(--cyan);font-family:"JetBrains Mono",monospace;font-weight:700}
-      .demo-card{
-        background:linear-gradient(180deg,var(--surface-2),var(--surface));
-        border:1px dashed rgba(0,229,255,.35);border-radius:var(--radius);
-        padding:38px 36px;text-align:center;position:relative;overflow:hidden;
-      }
-      .demo-badge{
-        display:inline-block;background:var(--gold);color:#241703;font-weight:800;
-        font-size:.72rem;letter-spacing:.16em;border-radius:999px;padding:7px 16px;line-height:1;
-      }
-      .demo-title{font-size:clamp(2.4rem,6vw,3.4rem);margin-top:16px}
-      .demo-sub{color:var(--muted);font-size:1rem;margin:8px auto 0;max-width:520px;line-height:1.6}
-      .demo-sub b{color:#fff}
-      .demo-stage{
-        position:relative;width:min(216px,54vw);margin:24px auto 4px;cursor:pointer;
-        -webkit-tap-highlight-color:transparent;
-      }
-      .demo-stage svg{width:100%;height:auto;display:block;filter:drop-shadow(0 0 20px rgba(0,229,255,.28));transition:filter .3s var(--ease)}
-      .demo-stage:hover svg{filter:drop-shadow(0 0 30px rgba(0,229,255,.45))}
-      .demo-stage .demo-line{
-        position:absolute;left:2%;right:2%;top:4%;height:2px;border-radius:2px;opacity:0;pointer-events:none;
-        background:linear-gradient(90deg,transparent,var(--cyan),transparent);
-        box-shadow:0 0 16px rgba(0,229,255,.85);
-      }
-      .demo-stage.scanning .demo-line{opacity:1;animation:demoSweep .65s ease-in-out infinite alternate}
-      @keyframes demoSweep{from{top:5%}to{top:93%}}
-      .demo-stage.scanning svg{animation:demoCharge 2s ease-in-out forwards}
-      @keyframes demoCharge{
-        0%{filter:drop-shadow(0 0 12px rgba(0,229,255,.25))}
-        55%{filter:drop-shadow(0 0 52px rgba(0,229,255,.85))}
-        100%{filter:drop-shadow(0 0 30px rgba(0,229,255,.5))}
-      }
-      .demo-result{margin-top:10px;animation:demoIn .5s var(--ease)}
-      @keyframes demoIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-      .demo-result .demo-orb{display:flex;justify-content:center}
-      .demo-result .demo-orb svg{filter:drop-shadow(0 0 22px rgba(0,229,255,.35))}
-      .demo-result.royal .demo-orb svg{filter:drop-shadow(0 0 22px rgba(245,196,81,.45))}
-      .demo-tier{font-family:"JetBrains Mono",monospace;font-size:.74rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);margin-top:14px}
-      .demo-amt{font-family:"JetBrains Mono",monospace;font-size:2.6rem;font-weight:700;letter-spacing:-.03em;line-height:1.1;margin-top:4px;color:var(--cyan)}
-      .demo-result.royal .demo-amt{color:var(--gold)}
-      .demo-amt .unit{font-size:.8rem;color:var(--faint);letter-spacing:.14em}
-      .demo-core-line{color:var(--muted);font-size:1rem;margin:12px auto 0;max-width:460px;line-height:1.6}
-      .demo-core-line b{color:#fff}
-      .demo-note{color:var(--faint);font-size:.88rem;margin:20px auto 0;max-width:520px;line-height:1.6}
-      #btnDemo{margin-top:18px}
-
       /* ---------- community ---------- */
       .comm-handle{font-family:"Bebas Neue",sans-serif;font-size:2rem;letter-spacing:.06em;line-height:1}
       .comm-sub{color:var(--muted);font-size:.97rem;margin:6px 0 0;max-width:520px;line-height:1.6}
@@ -486,17 +437,6 @@
       .rbadge.sealed{color:var(--gold);border-color:rgba(245,196,81,.4)}
       .today-row.is-now{background:rgba(0,229,255,.05);box-shadow:inset 3px 0 0 var(--cyan)}
 
-      /* demo activity log — the visitor's own demo scans */
-      .demo-prog{font-family:"JetBrains Mono",monospace;color:var(--cyan);font-weight:700;font-size:1rem;margin-top:12px;min-height:1.4em}
-      .demo-log{margin:22px auto 0;max-width:560px;text-align:left}
-      .demo-log h4{margin:0 0 8px;font-family:"JetBrains Mono",monospace;font-size:.7rem;font-weight:700;letter-spacing:.18em;color:var(--faint);text-transform:uppercase}
-      .demo-log-row{display:flex;align-items:center;gap:12px;padding:10px 14px;border:1px solid var(--line-soft);border-radius:12px;background:var(--surface-3);margin-top:8px;animation:demoIn .45s var(--ease)}
-      .demo-log-row .lt{font-family:"JetBrains Mono",monospace;font-size:.8rem;color:var(--faint);white-space:nowrap}
-      .demo-log-row .ln2{flex:1;font-weight:700;font-size:.92rem}
-      .demo-log-row .la{font-family:"JetBrains Mono",monospace;font-weight:700;color:var(--cyan);white-space:nowrap}
-      .demo-log-row.royal .la{color:var(--gold)}
-      .demo-log-row .ld{font-family:"JetBrains Mono",monospace;font-size:.62rem;font-weight:700;letter-spacing:.12em;color:var(--gold);border:1px solid rgba(245,196,81,.45);border-radius:999px;padding:3px 8px}
-
       footer{border-top:1px solid var(--line-soft);margin-top:104px;padding:30px 0 44px}
       .foot-row{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:center}
       footer .flinks{display:flex;gap:22px;flex-wrap:wrap}
@@ -533,8 +473,7 @@
         .faq summary{padding:18px 18px}
         .faq .fa{padding:0 18px 20px}
         .board-card{padding:24px 20px}
-        .demo-card{padding:28px 20px}
-        section,.demo{scroll-margin-top:210px}
+        section{scroll-margin-top:210px}
         .lm-grid{grid-template-columns:1fr}
         .live-monitor{padding:22px 18px}
         .lm-local{margin-left:0}
@@ -542,7 +481,7 @@
         .ticker{margin:0 -20px}
       }
       @media (prefers-reduced-motion: reduce){
-        .emblem-sweep,.emblem-core-pulse,.hero-line,.demo-stage.scanning .demo-line,.demo-stage.scanning svg,.demo-result,.radar.core-tap svg,.live-dot.live,.ticker-track,.lm-live i{animation:none}
+        .emblem-sweep,.emblem-core-pulse,.hero-line,.radar.core-tap svg,.live-dot.live,.ticker-track,.lm-live i{animation:none}
         .lm-fill{transition:none}
         section::after{animation:none;opacity:0}
         .radar{transition:none}
@@ -560,7 +499,6 @@
         <nav class="topnav" aria-label="Sections">
           <a class="nav-cta" href="#live">Live Round</a>
           <a href="#scan">Scan</a>
-          <a href="#demo">Demo</a>
           <a href="#myscans">My Scans</a>
           <a href="#claim">Claim</a>
           <a href="#how">How It Works</a>
@@ -665,47 +603,6 @@
             <div class="lm-cell"><div class="k">Previous round claims open</div><div class="v gd" id="lmPrevIn">--:--:--</div><div class="s" id="lmPrevAt">—</div></div>
           </div>
           <p class="lm-note" id="lmNote">The round clock above is <b>real and running right now</b> — it never stops. The contracts are live on BNB Chain, and the schedule you see is the schedule they run.</p>
-        </div>
-      </div>
-
-      <!-- DEMO SCAN — preview only, never touches a wallet or contract -->
-      <div class="demo" id="demo">
-        <div class="demo-card">
-          <span class="demo-badge">DEMO — NOT A REAL MINT</span>
-          <h2 class="demo-title">TRY A SCAN</h2>
-          <p class="demo-sub">This is just a preview. <b>No wallet, no transaction, nothing minted.</b> Tap the Core, watch it work, see what a scan can pay.</p>
-          <div class="demo-stage" id="demoStage" role="button" tabindex="0" aria-label="Run a demo scan">
-            <svg viewBox="0 0 200 200" aria-hidden="true">
-              <g stroke="rgba(207,250,254,.45)" stroke-width="1.2" stroke-linejoin="round">
-                <polygon points="100,10 52,54 73,76 100,50" fill="#a5f3fc"/>
-                <polygon points="100,10 100,50 127,76 148,54" fill="#67e8f9"/>
-                <polygon points="52,54 73,76 73,124 52,146" fill="#0e7490"/>
-                <polygon points="148,54 127,76 127,124 148,146" fill="#0891b2"/>
-                <polygon points="52,146 73,124 100,150 100,190" fill="#164e63"/>
-                <polygon points="148,146 127,124 100,150 100,190" fill="#155e75"/>
-              </g>
-              <polygon points="100,50 127,76 127,124 100,150 73,124 73,76" fill="#a5f3fc" stroke="rgba(236,254,255,.7)" stroke-width="1.4"/>
-              <circle cx="100" cy="100" r="7" fill="#ffffff"/>
-              <polygon points="100,10 148,54 148,146 100,190 52,146 52,54" fill="none" stroke="#cffafe" stroke-opacity=".8" stroke-width="2.2"/>
-            </svg>
-            <span class="demo-line" aria-hidden="true"></span>
-          </div>
-          <div>
-            <button class="btn" id="btnDemo" type="button">Demo Scan</button>
-          </div>
-          <div class="demo-prog" id="demoProg" aria-hidden="true"></div>
-          <div class="demo-result" id="demoResult" hidden>
-            <div class="demo-orb" id="demoOrb"></div>
-            <div class="demo-tier" id="demoTier"></div>
-            <div class="demo-amt"><span id="demoAmt"></span> <span class="unit">$SCAN</span></div>
-            <p class="demo-core-line" id="demoCoreLine"></p>
-          </div>
-          <p class="demo-tally" id="demoTally" hidden>Demo scans this visit: <b id="demoCount">0</b> · Royals found: <b id="demoRoyals">0</b> · Best Orb: <b id="demoBest">—</b></p>
-          <div class="demo-log" id="demoLog" hidden>
-            <h4>Your demo scans — this visit</h4>
-            <div id="demoLogRows"></div>
-          </div>
-          <p class="demo-note">Demo only — the Orb above is a picture, not an NFT. Real scans are live in the Scan section below.</p>
         </div>
       </div>
 
@@ -1783,6 +1680,19 @@ Report how much $SCAN I received for each claim.</div>
         radar.classList.add("core-tap");
         setTimeout(function(){ radar.classList.remove("core-tap"); }, 650);
       });
+      radar.style.cursor = "pointer";
+      radar.setAttribute("role", "button");
+      radar.setAttribute("tabindex", "0");
+      radar.setAttribute("aria-label", "Go to live Scan");
+      radar.addEventListener("click", function(){
+        var s = document.getElementById("scan");
+        if (s) s.scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
+        var b = document.getElementById("btnScan");
+        if (b) setTimeout(function(){ try{ b.focus({ preventScroll: true }); }catch(e){} }, 600);
+      });
+      radar.addEventListener("keydown", function(e){
+        if (e.key === "Enter" || e.key === " "){ e.preventDefault(); radar.click(); }
+      });
       if (reduce || !finePointer || !svg) return;
       hero.addEventListener("pointermove", function(e){
         var r = radar.getBoundingClientRect();
@@ -1801,108 +1711,6 @@ Report how much $SCAN I received for each claim.</div>
         svg.style.filter = "";
       });
     })();
-
-    /* ---------- demo scan — pure preview: no wallet, no contract, no mint ---------- */
-    (function(){
-      var stage = $("demoStage"), btn = $("btnDemo"), result = $("demoResult");
-      if (!stage || !btn || !result) return;
-      var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      var PALS = {
-        blue:  { crownL:"#e0f2fe", crownR:"#7dd3fc", left:"#0369a1", right:"#0284c7", pavL:"#0c4a6e", pavR:"#075985", core:"#bae6fd", edge:"rgba(224,242,254,.4)" },
-        sky:   { crownL:"#e0f2fe", crownR:"#38bdf8", left:"#0369a1", right:"#0284c7", pavL:"#082f49", pavR:"#0c4a6e", core:"#7dd3fc", edge:"rgba(207,250,254,.4)" },
-        cyan:  { crownL:"#a5f3fc", crownR:"#67e8f9", left:"#0e7490", right:"#0891b2", pavL:"#164e63", pavR:"#155e75", core:"#a5f3fc", edge:"rgba(207,250,254,.45)" },
-        gold:  { crownL:"#fef3c7", crownR:"#fcd34d", left:"#b45309", right:"#d97706", pavL:"#78350f", pavR:"#92400e", core:"#fde68a", edge:"rgba(254,243,199,.45)" }
-      };
-      var TIERS = [
-        { pal:"blue", w:40, name:"Tier 1 · Quiet Round", amt:"2,500", royal:false,
-          line:"The Core: &ldquo;Quiet round. <b>Still pays.</b> That's the deal — next round in 8 hours, we go again.&rdquo;" },
-        { pal:"sky", w:35, name:"Tier 2 · Busy Round", amt:"12,500", royal:false,
-          line:"The Core: &ldquo;Busy round. The crowd showed up — and <b>the crowd lifts every Orb</b>.&rdquo;" },
-        { pal:"cyan", w:22, name:"Tier 3 · Packed Round", amt:"60,000", royal:false,
-          line:"The Core: &ldquo;Packed. <b>That's the good stuff</b> — top tier, no Royal needed.&rdquo;" },
-        { pal:"gold", w:3, name:"Royal Orb · The Rare One", amt:"250,000", royal:true,
-          line:"The Core: &ldquo;<b>ROYAL.</b> Three in a hundred, whatever the round looks like. The Core bows.&rdquo;" }
-      ];
-      function demoOrbSvg(p){
-        function poly(pts, fill){ return '<polygon points="' + pts + '" fill="' + fill + '"/>'; }
-        return '<svg width="104" height="104" viewBox="0 0 200 200" aria-hidden="true"><g stroke="' + p.edge + '" stroke-width="2.5" stroke-linejoin="round">' +
-          poly("100,10 52,54 73,76 100,50", p.crownL) +
-          poly("100,10 100,50 127,76 148,54", p.crownR) +
-          poly("52,54 73,76 73,124 52,146", p.left) +
-          poly("148,54 127,76 127,124 148,146", p.right) +
-          poly("52,146 73,124 100,150 100,190", p.pavL) +
-          poly("148,146 127,124 100,150 100,190", p.pavR) +
-          "</g>" +
-          poly("100,50 127,76 127,124 100,150 73,124 73,76", p.core) +
-          '<circle cx="100" cy="100" r="8" fill="#ffffff" opacity=".9"/></svg>';
-      }
-      function pickTier(){
-        var total = 0, i;
-        for (i = 0; i < TIERS.length; i++) total += TIERS[i].w;
-        var roll = Math.random() * total;
-        for (i = 0; i < TIERS.length; i++){ roll -= TIERS[i].w; if (roll <= 0) return TIERS[i]; }
-        return TIERS[0];
-      }
-      var scanning = false;
-      var dCount = 0, dRoyals = 0, dBest = 0;
-      var progTimer = null;
-      function runDemo(){
-        if (scanning) return;
-        scanning = true;
-        btn.disabled = true;
-        btn.textContent = "Scanning…";
-        result.hidden = true;
-        result.classList.remove("royal");
-        stage.classList.add("scanning");
-        var prog = $("demoProg");
-        var dur = reduce ? 350 : 2000;
-        var t0 = Date.now();
-        prog.textContent = "SCANNING… 0%";
-        progTimer = setInterval(function(){
-          var p = Math.min(99, Math.floor((Date.now() - t0) / dur * 100));
-          prog.textContent = "SCANNING… " + p + "%";
-        }, 90);
-        setTimeout(function(){
-          clearInterval(progTimer);
-          prog.textContent = "SCAN COMPLETE · 100%";
-          var t = pickTier();
-          stage.classList.remove("scanning");
-          $("demoOrb").innerHTML = demoOrbSvg(PALS[t.pal]);
-          $("demoTier").textContent = t.name;
-          $("demoAmt").textContent = t.amt;
-          $("demoCoreLine").innerHTML = t.line;
-          if (t.royal) result.classList.add("royal");
-          dCount++;
-          if (t.royal) dRoyals++;
-          var amtNum = parseInt(t.amt.replace(/,/g, ""), 10);
-          if (amtNum > dBest) dBest = amtNum;
-          $("demoCount").textContent = dCount;
-          $("demoRoyals").textContent = dRoyals;
-          $("demoBest").textContent = dBest.toLocaleString("en-US") + " $SCAN";
-          $("demoTally").hidden = false;
-          /* session log — the visitor's own demo scans, newest first */
-          var rows = $("demoLogRows");
-          var row = document.createElement("div");
-          row.className = "demo-log-row" + (t.royal ? " royal" : "");
-          var nowT = new Date();
-          var lt = String(nowT.getHours()).padStart(2, "0") + ":" + String(nowT.getMinutes()).padStart(2, "0") + ":" + String(nowT.getSeconds()).padStart(2, "0");
-          row.innerHTML = '<span class="lt">' + lt + '</span><span class="ln2">' + t.name + '</span><span class="la">' + t.amt + ' $SCAN</span><span class="ld">DEMO</span>';
-          rows.insertBefore(row, rows.firstChild);
-          while (rows.children.length > 6) rows.removeChild(rows.lastChild);
-          $("demoLog").hidden = false;
-          result.hidden = false;
-          btn.disabled = false;
-          btn.textContent = "Scan Again — Demo";
-          scanning = false;
-        }, reduce ? 350 : 2000);
-      }
-      btn.addEventListener("click", runDemo);
-      stage.addEventListener("click", runDemo);
-      stage.addEventListener("keydown", function(e){
-        if (e.key === "Enter" || e.key === " "){ e.preventDefault(); runDemo(); }
-      });
-    })();
-
     applyDeployState();
     </script>
   </body>
