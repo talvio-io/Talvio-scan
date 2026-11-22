@@ -1,0 +1,1904 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="description" content="Talvio Scan — scan every round, mint an NFT, claim $SCAN. One free scan per 8-hour round for Agent ID holders on BNB Chain." />
+    <meta property="og:title" content="Talvio Scan" />
+    <meta property="og:description" content="A new round every 8 hours. Mint an Orb, claim $SCAN — one free scan per round for Binance Agent ID holders on BNB Chain." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Talvio Scan" />
+    <meta name="twitter:description" content="A new round every 8 hours. Mint an Orb, claim $SCAN — one free scan per round for Binance Agent ID holders on BNB Chain." />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cpolygon points='100,10 52,54 73,76 100,50' fill='%2367e8f9'/%3E%3Cpolygon points='100,10 100,50 127,76 148,54' fill='%2322d3ee'/%3E%3Cpolygon points='52,54 73,76 73,124 52,146' fill='%230e7490'/%3E%3Cpolygon points='148,54 127,76 127,124 148,146' fill='%230891b2'/%3E%3Cpolygon points='52,146 73,124 100,150 100,190' fill='%23164e63'/%3E%3Cpolygon points='148,146 127,124 100,150 100,190' fill='%23155e75'/%3E%3Cpolygon points='100,50 127,76 127,124 100,150 73,124 73,76' fill='%23a5f3fc'/%3E%3C/svg%3E" />
+    <title>Talvio Scan</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+    <style>
+      :root{
+        color-scheme: dark;
+        --bg:#000000;
+        --surface:#070b0c;
+        --surface-2:#0a1113;
+        --surface-3:#0d1618;
+        --line:rgba(255,255,255,.08);
+        --line-soft:rgba(255,255,255,.055);
+        --line-cyan:rgba(0,229,255,.28);
+        --ink:#ffffff;
+        --muted:#a9bcc0;
+        --faint:#6f878d;
+        --cyan:#00e5ff;
+        --cyan-deep:#0891b2;
+        --cyan-pale:#a5f3fc;
+        --gold:#f5c451;
+        --red:#f87171;
+        --green:#34d399;
+        --radius:24px;
+        --ease:cubic-bezier(.22,1,.36,1);
+      }
+      *{box-sizing:border-box}
+      html{scroll-behavior:smooth}
+      body{
+        margin:0;color:var(--ink);
+        background:
+          radial-gradient(1100px 620px at 50% -180px,rgba(0,229,255,.10),transparent 62%),
+          radial-gradient(900px 500px at 50% 340px,rgba(0,229,255,.05),transparent 65%),
+          var(--bg);
+        font-family:"Plus Jakarta Sans",system-ui,sans-serif;
+        font-size:16px;line-height:1.6;
+        -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+        overflow-x:hidden;overflow-x:clip;
+      }
+      main,footer{position:relative;z-index:1}
+      .wrap{max-width:1140px;margin:0 auto;padding:0 28px}
+      .mono{font-family:"JetBrains Mono",monospace}
+      h1,h2{font-family:"Bebas Neue",sans-serif;font-weight:400;margin:0}
+      button,[role="button"],select,summary,input:not([type="checkbox"],[type="radio"]){min-height:2.25rem}
+      a{color:var(--cyan)}
+      :focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:6px}
+      ::selection{background:rgba(0,229,255,.28);color:#fff}
+
+      /* ---------- top bar ---------- */
+      .topbar{
+        display:flex;align-items:center;justify-content:space-between;gap:12px;
+        padding:16px 0 12px;flex-wrap:wrap;
+        border-bottom:1px solid var(--line-soft);
+        position:sticky;top:0;z-index:60;
+        background:rgba(0,0,0,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+      }
+      .topnav{flex:0 0 100%;display:flex;flex-wrap:wrap;gap:2px 16px;margin-top:4px}
+      .topnav a{
+        color:var(--muted);text-decoration:none;font-weight:700;font-size:.84rem;letter-spacing:.02em;
+        padding:7px 1px;transition:color .25s var(--ease);
+      }
+      .topnav a:hover{color:var(--cyan)}
+      .topnav a.nav-cta{color:var(--cyan)}
+      .brand{display:flex;align-items:center;gap:11px;font-family:"Bebas Neue",sans-serif;font-size:1.45rem;letter-spacing:.14em;line-height:1;padding-top:2px}
+      .brand .mark{flex:none;filter:drop-shadow(0 0 7px rgba(0,229,255,.55))}
+      .deploy-flag{
+        font-family:"JetBrains Mono",monospace;font-size:.68rem;font-weight:600;letter-spacing:.14em;
+        color:var(--faint);background:transparent;border:1px solid var(--line-soft);border-radius:999px;padding:7px 12px;line-height:1;
+      }
+      .deploy-flag.live{color:var(--green);border-color:rgba(52,211,153,.35)}
+
+      /* ---------- hero — one compact composition, all in first screen ---------- */
+      .hero{text-align:center;padding:26px 0 0;position:relative}
+      .hero>*{position:relative;z-index:1}
+      .hero-line{
+        position:absolute;left:-28px;right:-28px;top:0;height:1px;z-index:0;pointer-events:none;
+        background:linear-gradient(90deg,transparent,rgba(0,229,255,.45) 30%,rgba(0,229,255,.45) 70%,transparent);
+        animation:heroSweep 9s ease-in-out infinite;
+      }
+      @keyframes heroSweep{0%{top:2%;opacity:0}12%{opacity:1}88%{opacity:1}100%{top:98%;opacity:0}}
+      .hero h1{font-size:clamp(3.6rem,10.5vw,6.6rem);line-height:.88;letter-spacing:.015em;color:var(--ink);margin-top:14px}
+      .hero h1 .scan-word{color:var(--cyan);text-shadow:0 0 28px rgba(0,229,255,.45)}
+      .hero .sub{color:var(--muted);font-size:clamp(1rem,2.4vw,1.18rem);font-weight:500;margin:14px auto 0;max-width:540px;line-height:1.55;letter-spacing:-.01em}
+      .hero .sub b{color:#fff;font-weight:700}
+      .hero-cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:20px}
+      .hero-cta a.btn{text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+      .hero-cta a.btn.ghostlink{background:transparent;color:var(--ink);border:1px solid var(--line);box-shadow:none}
+      .hero-cta a.btn.ghostlink:hover{background:rgba(255,255,255,.05);box-shadow:none}
+
+      /* THE EMBLEM — the Scan Core: a faceted crystal, the one mark of Talvio Scan */
+      .radar-zone{display:flex;justify-content:center;padding:0}
+      .radar{position:relative;width:min(248px,58vw);aspect-ratio:1;transition:transform .25s ease-out;will-change:transform}
+      .radar.core-tap svg{animation:tapPulse .6s ease-out}
+      @keyframes tapPulse{0%{transform:scale(1)}35%{transform:scale(1.07)}100%{transform:scale(1)}}
+      .core-says{margin:16px auto 0;font-size:1rem;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
+      .core-says .core-tag{font-family:"JetBrains Mono",monospace;font-size:.66rem;font-weight:700;letter-spacing:.18em;color:#002630;background:var(--cyan);border-radius:999px;padding:4px 10px}
+      .core-says b{color:#fff;font-weight:700}
+      .radar .orb-core{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+      .radar .orb-core svg{
+        width:100%;height:auto;
+        filter:drop-shadow(0 0 26px rgba(0,229,255,.30));
+      }
+      .emblem-sweep{transform-origin:100px 100px;animation:ringSpin 11s linear infinite}
+      .emblem-core-pulse{transform-origin:100px 100px;animation:orbBreathe 4.5s ease-in-out infinite}
+      @keyframes orbBreathe{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+      @keyframes ringSpin{to{transform:rotate(360deg)}}
+
+      /* live stats — one quiet strip, huge mono numbers */
+      .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin:26px 0 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+      .stat{background:transparent;border:none;padding:20px 12px 18px;text-align:center}
+      .stat + .stat{border-left:1px solid var(--line-soft)}
+      .stat .num{font-family:"JetBrains Mono",monospace;font-size:clamp(1.85rem,5vw,2.7rem);font-weight:700;color:var(--cyan);line-height:1.05;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+      .stat .num.plain{color:var(--ink)}
+      .stat .lbl{font-size:.7rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--faint);margin-top:10px}
+      .stat-note{text-align:center;color:var(--faint);font-size:.9rem;margin:16px auto 0;max-width:620px}
+
+      /* ---------- sections ---------- */
+      section{padding:72px 0 0}
+      .sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:10px;flex-wrap:wrap}
+      .sec-num{font-family:"JetBrains Mono",monospace;color:var(--cyan);font-weight:700;font-size:.85rem;letter-spacing:.14em}
+      .sec-num::after{content:"";display:inline-block;width:34px;height:1px;background:var(--line-cyan);vertical-align:middle;margin-left:14px}
+      h2{font-size:clamp(3rem,8vw,4.6rem);line-height:.95;letter-spacing:.02em}
+      .sec-desc{color:var(--muted);font-size:1.06rem;margin:6px 0 28px;max-width:620px;line-height:1.6}
+      .card{
+        background:linear-gradient(180deg,var(--surface-2),var(--surface));
+        border:1px solid var(--line);border-radius:var(--radius);
+        padding:36px;
+        transition:border-color .35s var(--ease);
+      }
+      .card:hover{border-color:rgba(0,229,255,.18)}
+      .card + .card{margin-top:16px}
+
+      /* buttons + inputs */
+      .btn{
+        appearance:none;border:1px solid transparent;cursor:pointer;
+        background:var(--cyan);color:#002630;font-weight:800;font-size:1.02rem;letter-spacing:-.01em;
+        border-radius:999px;padding:15px 34px;min-height:56px;
+        font-family:"Plus Jakarta Sans",sans-serif;
+        box-shadow:0 0 0 1px rgba(0,229,255,.35),0 10px 34px rgba(0,229,255,.22);
+        transition:transform .25s var(--ease),box-shadow .25s var(--ease),background .25s var(--ease),border-color .25s var(--ease);
+      }
+      .btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 0 0 1px rgba(0,229,255,.5),0 16px 44px rgba(0,229,255,.34)}
+      .btn:active:not(:disabled){transform:translateY(0)}
+      .btn:disabled{opacity:.38;cursor:not-allowed;box-shadow:none}
+      .btn.ghost{background:transparent;color:var(--cyan);border-color:rgba(0,229,255,.4);box-shadow:none}
+      .btn.ghost:hover:not(:disabled){background:rgba(0,229,255,.08);box-shadow:0 10px 28px rgba(0,229,255,.12)}
+      .btn.small{padding:9px 22px;min-height:42px;font-size:.92rem}
+      .btn.gold{background:var(--gold);border-color:rgba(245,196,81,.5);color:#241703;box-shadow:0 10px 30px rgba(245,196,81,.18)}
+      .btn.gold:hover:not(:disabled){box-shadow:0 16px 40px rgba(245,196,81,.3)}
+      .field{
+        width:100%;background:#04080a;border:1px solid var(--line);border-radius:14px;
+        color:var(--ink);padding:13px 16px;font-size:.95rem;min-height:50px;
+        font-family:"JetBrains Mono",monospace;
+        transition:border-color .25s var(--ease),box-shadow .25s var(--ease);
+      }
+      .field:focus{outline:none;border-color:var(--line-cyan);box-shadow:0 0 0 3px rgba(0,229,255,.12)}
+      .field::placeholder{color:var(--faint);font-family:"Plus Jakarta Sans",sans-serif}
+      .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+      .status-line{font-size:.92rem;color:var(--muted);margin-top:14px;min-height:1.4em;line-height:1.55;overflow-wrap:anywhere}
+      .status-line.ok{color:var(--green)}
+      .status-line.err{color:var(--red)}
+      .status-line.warn{color:var(--gold)}
+      .addr-chip{
+        font-family:"JetBrains Mono",monospace;font-size:.82rem;background:#04080a;
+        border:1px solid var(--line);border-radius:999px;padding:8px 14px;color:var(--muted);
+        max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+      }
+      .check-line{display:flex;align-items:flex-start;gap:10px;font-size:.95rem;color:var(--muted);margin-top:12px;line-height:1.55}
+      .check-line .pip{width:9px;height:9px;border-radius:50%;background:var(--faint);flex:none;margin-top:7px}
+      .check-line .pip.yes{background:var(--green);box-shadow:0 0 10px var(--green)}
+      .check-line .pip.no{background:var(--red);box-shadow:0 0 10px var(--red)}
+
+      /* mode toggle */
+      .toggle{display:inline-flex;background:#04080a;border:1px solid var(--line);border-radius:999px;padding:4px;gap:4px}
+      .toggle button{
+        border:0;background:transparent;color:var(--muted);font-weight:700;cursor:pointer;
+        border-radius:999px;padding:10px 22px;font-family:"Plus Jakarta Sans",sans-serif;font-size:.95rem;min-height:42px;
+        transition:background .25s var(--ease),color .25s var(--ease);
+      }
+      .toggle button[aria-pressed="true"]{background:var(--cyan);color:#002630}
+      .price-note{color:var(--muted);font-size:.92rem}
+
+      /* my scans */
+      .scan-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:14px;margin-top:20px}
+      .scan-item{
+        background:var(--surface-3);border:1px solid var(--line-soft);border-radius:18px;
+        padding:20px 12px 18px;text-align:center;
+        transition:transform .3s var(--ease),border-color .3s var(--ease);
+      }
+      .scan-item:hover{transform:translateY(-3px);border-color:rgba(0,229,255,.22)}
+      .scan-item.royal{border-color:rgba(245,196,81,.45)}
+      .scan-item .sid{font-family:"JetBrains Mono",monospace;font-weight:700;margin-top:10px}
+      .scan-item .smeta{font-size:.8rem;color:var(--muted);margin-top:3px}
+      .scan-item .sclaim{margin-top:12px}
+      .badge-royal{
+        display:inline-block;font-size:.66rem;font-weight:800;letter-spacing:.12em;
+        color:#241703;background:var(--gold);border-radius:999px;padding:4px 10px;margin-top:8px;
+      }
+      .badge-claimed{
+        display:inline-block;font-size:.66rem;font-weight:800;letter-spacing:.12em;
+        color:#02120b;background:var(--green);border-radius:999px;padding:4px 10px;margin-top:8px;
+      }
+      .empty-note{color:var(--faint);text-align:center;padding:24px 0 8px}
+
+      /* tiers — one cyan scale, gold reserved for Royal */
+      .tiers{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px}
+      .tier{
+        border:1px solid var(--line);border-radius:var(--radius);padding:34px 18px 30px;text-align:center;
+        background:linear-gradient(180deg,var(--surface-2),var(--surface));
+        transition:transform .3s var(--ease),border-color .3s var(--ease);
+      }
+      .tier:hover{transform:translateY(-3px);border-color:rgba(0,229,255,.22)}
+      .tier svg{width:84px;height:84px;filter:drop-shadow(0 0 18px rgba(0,229,255,.35))}
+      .tier.t-gold svg{filter:drop-shadow(0 0 18px rgba(245,196,81,.4))}
+      .tier .amt{font-family:"JetBrains Mono",monospace;font-size:2.1rem;font-weight:700;margin-top:12px;letter-spacing:-.02em;line-height:1.1}
+      .tier .cond{color:var(--muted);font-size:.88rem;margin-top:6px;line-height:1.5}
+      .tier .unit{font-size:.72rem;color:var(--faint);letter-spacing:.14em;text-transform:uppercase;margin-top:3px;font-weight:700}
+      .tier.t-blue .amt{color:var(--cyan-pale)}
+      .tier.t-purple .amt{color:var(--cyan)}
+      .tier.t-gold{border-color:rgba(245,196,81,.4)}
+      .tier.t-gold .amt{color:var(--gold)}
+      .claim-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-top:14px}
+      .fact{background:linear-gradient(180deg,var(--surface-2),var(--surface));border:1px solid var(--line);border-radius:var(--radius);padding:26px}
+      .fact .fk{font-family:"JetBrains Mono",monospace;color:var(--cyan);font-weight:700;font-size:1.35rem;letter-spacing:-.01em}
+      .fact .fv{color:var(--muted);font-size:.92rem;margin-top:5px;line-height:1.55}
+
+      /* steps */
+      .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+      .step{background:linear-gradient(180deg,var(--surface-2),var(--surface));border:1px solid var(--line);border-radius:var(--radius);padding:32px;transition:border-color .3s var(--ease)}
+      .step:hover{border-color:rgba(0,229,255,.18)}
+      .step .sn{font-family:"Bebas Neue",sans-serif;font-size:3.6rem;color:var(--cyan);line-height:.9;text-shadow:0 0 26px rgba(0,229,255,.4)}
+      .step h3{margin:16px 0 7px;font-size:1.22rem;letter-spacing:-.01em}
+      .step p{margin:0;color:var(--muted);font-size:.97rem;line-height:1.6}
+
+      /* prompt box */
+      .prompt-box{
+        background:#020506;border:1px solid var(--line);border-radius:18px;padding:22px;
+        font-family:"JetBrains Mono",monospace;font-size:.9rem;line-height:1.75;color:#bfeef7;
+        white-space:pre-wrap;word-break:break-word;
+      }
+
+      /* contracts */
+      .contract-list{display:grid;gap:10px}
+      .contract-row{
+        display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+        background:var(--surface-2);border:1px solid var(--line-soft);border-radius:14px;padding:15px 18px;
+      }
+      .contract-row .cname{font-weight:700}
+      .contract-row .caddr{font-family:"JetBrains Mono",monospace;font-size:.8rem;color:var(--faint);overflow-wrap:anywhere}
+      .contract-row .caddr a{overflow-wrap:anywhere}
+
+      /* tokenomics split bar */
+      .split-bar{display:flex;border-radius:18px;overflow:hidden;border:1px solid var(--line);min-height:92px}
+      .split-seg{display:flex;flex-direction:column;justify-content:center;padding:18px 20px;gap:2px;min-width:0}
+      .split-seg .sp{font-family:"JetBrains Mono",monospace;font-weight:700;font-size:1.5rem;line-height:1.1;letter-spacing:-.02em}
+      .split-seg .sn2{font-size:.72rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase}
+      .seg-claim{flex:6;background:linear-gradient(135deg,#22d3ee,#0891b2);color:#032630}
+      .seg-lp{flex:3;background:linear-gradient(135deg,#155e75,#0e7490);color:#ecfeff}
+      .seg-owner{flex:1.6;background:var(--surface-3);color:var(--muted)}
+      .seg-owner .sp{color:var(--ink)}
+      .tok-legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin-top:14px}
+      .tok-item{background:linear-gradient(180deg,var(--surface-2),var(--surface));border:1px solid var(--line);border-radius:var(--radius);padding:26px}
+      .tok-item .tk{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.02rem}
+      .tok-item .dot{width:11px;height:11px;border-radius:3px;flex:none}
+      .tok-item .tv{color:var(--muted);font-size:.93rem;margin-top:7px;line-height:1.6}
+      .tok-item .tv b{color:var(--ink)}
+
+      /* tiers showcase — the big cards */
+      .showcase{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+      .big-tier{
+        border:1px solid var(--line);border-radius:var(--radius);padding:40px 22px 34px;text-align:center;position:relative;overflow:hidden;
+        background:linear-gradient(180deg,var(--surface-2),var(--surface));
+        transition:transform .3s var(--ease),border-color .3s var(--ease);
+      }
+      .big-tier:hover{transform:translateY(-4px);border-color:rgba(0,229,255,.25)}
+      .big-tier::before{content:"";position:absolute;inset:0 0 auto 0;height:120px;background:radial-gradient(300px 120px at 50% 0,var(--glow,rgba(0,229,255,.14)),transparent 70%);pointer-events:none}
+      .big-tier svg{width:104px;height:104px;filter:drop-shadow(0 0 22px var(--glow,rgba(0,229,255,.35)))}
+      .big-tier .tname{font-family:"JetBrains Mono",monospace;font-size:.72rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);margin-top:18px}
+      .big-tier .amt{font-family:"JetBrains Mono",monospace;font-size:2.6rem;font-weight:700;margin-top:6px;letter-spacing:-.03em;line-height:1.05}
+      .big-tier .unit{font-size:.72rem;color:var(--faint);letter-spacing:.14em;text-transform:uppercase;margin-top:4px;font-weight:700}
+      .big-tier .cond{color:var(--muted);font-size:.92rem;margin-top:12px;line-height:1.55}
+      .big-tier.bt-blue{--glow:rgba(125,211,252,.35)} .big-tier.bt-blue .amt{color:#bae6fd}
+      .big-tier.bt-sky{--glow:rgba(56,189,248,.35)} .big-tier.bt-sky .amt{color:#7dd3fc}
+      .big-tier.bt-cyan{--glow:rgba(0,229,255,.4)} .big-tier.bt-cyan .amt{color:var(--cyan)}
+      .big-tier.bt-gold{--glow:rgba(245,196,81,.4);border-color:rgba(245,196,81,.4)} .big-tier.bt-gold .amt{color:var(--gold)}
+      .big-tier.bt-gold:hover{border-color:rgba(245,196,81,.6)}
+      .tier-rule{text-align:center;color:var(--muted);font-size:.98rem;margin:20px auto 0;max-width:640px;line-height:1.6}
+      .tier-rule b{color:var(--ink)}
+
+      /* schedule timeline */
+      .timeline{position:relative;margin-top:6px}
+      .timeline::before{content:"";position:absolute;left:118px;top:10px;bottom:10px;width:1px;background:linear-gradient(180deg,transparent,var(--line-cyan) 12%,var(--line-cyan) 88%,transparent)}
+      .tl-row{display:grid;grid-template-columns:96px 45px 1fr;gap:0;align-items:start;padding:17px 0}
+      .tl-time{font-family:"JetBrains Mono",monospace;font-weight:700;color:var(--cyan);font-size:1.02rem;text-align:right;padding-top:1px;letter-spacing:-.01em}
+      .tl-dot{position:relative;display:flex;justify-content:center;padding-top:5px}
+      .tl-dot::after{content:"";width:11px;height:11px;border-radius:50%;background:var(--bg);border:2px solid var(--cyan);box-shadow:0 0 12px rgba(0,229,255,.5)}
+      .tl-body h3{margin:0;font-size:1.08rem;letter-spacing:-.01em}
+      .tl-body p{margin:4px 0 0;color:var(--muted);font-size:.95rem;line-height:1.6;max-width:560px}
+      .tl-row.gold .tl-time{color:var(--gold)}
+      .tl-row.gold .tl-dot::after{border-color:var(--gold);box-shadow:0 0 12px rgba(245,196,81,.5)}
+
+      /* leaderboard + activity */
+      .board{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+      .board-card{background:linear-gradient(180deg,var(--surface-2),var(--surface));border:1px solid var(--line);border-radius:var(--radius);padding:30px}
+      .board-card h3{margin:0 0 6px;font-size:1.15rem;letter-spacing:-.01em;display:flex;align-items:center;gap:10px}
+      .board-card h3 .live-dot{width:8px;height:8px;border-radius:50%;background:var(--faint);flex:none}
+      .board-card h3 .live-dot.live{background:var(--green);box-shadow:0 0 10px var(--green);animation:dotPulse 2.2s ease-in-out infinite}
+      @keyframes dotPulse{50%{opacity:.4}}
+      .feed-row{display:flex;align-items:center;gap:12px;padding:11px 2px;border-bottom:1px solid var(--line-soft)}
+      .feed-row:last-child{border-bottom:none}
+      .feed-row .fid{font-family:"JetBrains Mono",monospace;font-weight:700;color:var(--ink);white-space:nowrap}
+      .feed-row .fown{flex:1;color:var(--muted);font-family:"JetBrains Mono",monospace;font-size:.86rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+      .feed-row .fday{color:var(--faint);font-size:.82rem;white-space:nowrap}
+      .lb-row{display:flex;align-items:center;gap:14px;padding:13px 2px;border-bottom:1px solid var(--line-soft)}
+      .lb-row:last-of-type{border-bottom:none}
+      .lb-rank{font-family:"Bebas Neue",sans-serif;font-size:1.5rem;color:var(--cyan);width:26px;line-height:1;padding-top:2px}
+      .lb-row:nth-child(3) .lb-rank{color:var(--cyan-pale)}
+      .lb-name{flex:1;color:var(--faint);font-family:"JetBrains Mono",monospace;font-size:.9rem}
+      .lb-val{font-family:"JetBrains Mono",monospace;color:var(--faint);font-weight:700}
+      .board-empty{color:var(--muted);font-size:.97rem;line-height:1.65;padding:16px 0 4px}
+      .board-empty b{color:var(--ink)}
+      .feed-empty{display:flex;flex-direction:column;align-items:center;text-align:center;padding:22px 0 8px;gap:6px}
+      .feed-empty svg{opacity:.55}
+      .feed-empty p{margin:0;color:var(--muted);font-size:.97rem;line-height:1.65;max-width:300px}
+      .feed-empty p b{color:var(--ink)}
+
+      /* roadmap */
+      .road{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+      .road-step{background:linear-gradient(180deg,var(--surface-2),var(--surface));border:1px solid var(--line);border-radius:var(--radius);padding:32px;position:relative;transition:border-color .3s var(--ease)}
+      .road-step:hover{border-color:rgba(0,229,255,.18)}
+      .road-step .rn{font-family:"JetBrains Mono",monospace;color:var(--cyan);font-weight:700;font-size:.8rem;letter-spacing:.16em}
+      .road-step h3{margin:12px 0 7px;font-size:1.22rem;letter-spacing:-.01em}
+      .road-step p{margin:0;color:var(--muted);font-size:.95rem;line-height:1.6}
+      .road-step .rstat{display:inline-block;margin-top:16px;font-size:.68rem;font-weight:800;letter-spacing:.12em;border-radius:999px;padding:5px 11px;border:1px solid var(--line-cyan);color:var(--cyan)}
+      .road-step .rstat.later{border-color:var(--line);color:var(--faint)}
+
+      /* faq */
+      .faq{display:grid;gap:10px}
+      .faq details{background:linear-gradient(180deg,var(--surface-2),var(--surface));border:1px solid var(--line);border-radius:16px;overflow:hidden;transition:border-color .3s var(--ease)}
+      .faq details:hover{border-color:rgba(0,229,255,.18)}
+      .faq details[open ]{border-color:rgba(0,229,255,.25)}
+      .faq summary{
+        cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:14px;
+        padding:20px 24px;font-weight:700;font-size:1.02rem;letter-spacing:-.01em;min-height:56px;
+      }
+      .faq summary::-webkit-details-marker{display:none}
+      .faq summary .fx{flex:none;width:26px;height:26px;border-radius:50%;border:1px solid var(--line-cyan);color:var(--cyan);display:flex;align-items:center;justify-content:center;font-family:"JetBrains Mono",monospace;font-size:1rem;line-height:1;transition:transform .3s var(--ease)}
+      .faq details[open ] summary .fx{transform:rotate(45deg)}
+      .faq .fa{padding:0 24px 22px;color:var(--muted);font-size:.96rem;line-height:1.65;max-width:720px}
+      .faq .fa b{color:var(--ink)}
+
+      /* ---------- signature motif: the scan-line on every section ---------- */
+      section{position:relative;scroll-margin-top:150px}
+      section::before{
+        content:"";position:absolute;top:0;left:0;right:0;height:1px;
+        background:linear-gradient(90deg,transparent,rgba(0,229,255,.32) 18%,rgba(0,229,255,.32) 82%,transparent);
+      }
+      section::after{
+        content:"";position:absolute;top:0;left:-150px;width:150px;height:1px;pointer-events:none;
+        background:linear-gradient(90deg,transparent,#00e5ff,transparent);
+        animation:secSweep 8s linear infinite;
+      }
+      @keyframes secSweep{0%{left:-150px}55%{left:100%}100%{left:100%}}
+
+      /* ---------- demo scan ---------- */
+      .demo{margin-top:38px;scroll-margin-top:150px}
+      .demo-tally{color:var(--faint);font-size:.9rem;margin:12px auto 0;line-height:1.6}
+      .demo-tally b{color:var(--cyan);font-family:"JetBrains Mono",monospace;font-weight:700}
+      .demo-card{
+        background:linear-gradient(180deg,var(--surface-2),var(--surface));
+        border:1px dashed rgba(0,229,255,.35);border-radius:var(--radius);
+        padding:38px 36px;text-align:center;position:relative;overflow:hidden;
+      }
+      .demo-badge{
+        display:inline-block;background:var(--gold);color:#241703;font-weight:800;
+        font-size:.72rem;letter-spacing:.16em;border-radius:999px;padding:7px 16px;line-height:1;
+      }
+      .demo-title{font-size:clamp(2.4rem,6vw,3.4rem);margin-top:16px}
+      .demo-sub{color:var(--muted);font-size:1rem;margin:8px auto 0;max-width:520px;line-height:1.6}
+      .demo-sub b{color:#fff}
+      .demo-stage{
+        position:relative;width:min(216px,54vw);margin:24px auto 4px;cursor:pointer;
+        -webkit-tap-highlight-color:transparent;
+      }
+      .demo-stage svg{width:100%;height:auto;display:block;filter:drop-shadow(0 0 20px rgba(0,229,255,.28));transition:filter .3s var(--ease)}
+      .demo-stage:hover svg{filter:drop-shadow(0 0 30px rgba(0,229,255,.45))}
+      .demo-stage .demo-line{
+        position:absolute;left:2%;right:2%;top:4%;height:2px;border-radius:2px;opacity:0;pointer-events:none;
+        background:linear-gradient(90deg,transparent,var(--cyan),transparent);
+        box-shadow:0 0 16px rgba(0,229,255,.85);
+      }
+      .demo-stage.scanning .demo-line{opacity:1;animation:demoSweep .65s ease-in-out infinite alternate}
+      @keyframes demoSweep{from{top:5%}to{top:93%}}
+      .demo-stage.scanning svg{animation:demoCharge 2s ease-in-out forwards}
+      @keyframes demoCharge{
+        0%{filter:drop-shadow(0 0 12px rgba(0,229,255,.25))}
+        55%{filter:drop-shadow(0 0 52px rgba(0,229,255,.85))}
+        100%{filter:drop-shadow(0 0 30px rgba(0,229,255,.5))}
+      }
+      .demo-result{margin-top:10px;animation:demoIn .5s var(--ease)}
+      @keyframes demoIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+      .demo-result .demo-orb{display:flex;justify-content:center}
+      .demo-result .demo-orb svg{filter:drop-shadow(0 0 22px rgba(0,229,255,.35))}
+      .demo-result.royal .demo-orb svg{filter:drop-shadow(0 0 22px rgba(245,196,81,.45))}
+      .demo-tier{font-family:"JetBrains Mono",monospace;font-size:.74rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);margin-top:14px}
+      .demo-amt{font-family:"JetBrains Mono",monospace;font-size:2.6rem;font-weight:700;letter-spacing:-.03em;line-height:1.1;margin-top:4px;color:var(--cyan)}
+      .demo-result.royal .demo-amt{color:var(--gold)}
+      .demo-amt .unit{font-size:.8rem;color:var(--faint);letter-spacing:.14em}
+      .demo-core-line{color:var(--muted);font-size:1rem;margin:12px auto 0;max-width:460px;line-height:1.6}
+      .demo-core-line b{color:#fff}
+      .demo-note{color:var(--faint);font-size:.88rem;margin:20px auto 0;max-width:520px;line-height:1.6}
+      #btnDemo{margin-top:18px}
+
+      /* ---------- community ---------- */
+      .comm-handle{font-family:"Bebas Neue",sans-serif;font-size:2rem;letter-spacing:.06em;line-height:1}
+      .comm-sub{color:var(--muted);font-size:.97rem;margin:6px 0 0;max-width:520px;line-height:1.6}
+      .launch-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-top:26px}
+      .lstep{border:1px solid var(--line-soft);border-radius:16px;padding:22px;background:var(--surface-3)}
+      .lstep .ln{font-family:"JetBrains Mono",monospace;color:var(--cyan);font-weight:700;font-size:.74rem;letter-spacing:.16em}
+      .lstep h3{margin:9px 0 5px;font-size:1.08rem;letter-spacing:-.01em}
+      .lstep p{margin:0;color:var(--muted);font-size:.92rem;line-height:1.6}
+
+      /* ---------- live round monitor — real clock data, always on ---------- */
+      .utc-clock{font-family:"JetBrains Mono",monospace;font-size:.78rem;font-weight:600;color:var(--muted);letter-spacing:.06em;white-space:nowrap}
+      .utc-clock b{color:var(--cyan);font-weight:700}
+      .ticker{overflow:hidden;border-bottom:1px solid var(--line-soft);margin:0 -28px;padding:9px 0;position:relative}
+      .ticker-track{display:flex;gap:0;width:max-content;animation:tickMove 46s linear infinite;white-space:nowrap}
+      .ticker:hover .ticker-track{animation-play-state:paused}
+      @keyframes tickMove{to{transform:translateX(-50%)}}
+      .ticker-track span{font-family:"JetBrains Mono",monospace;font-size:.76rem;font-weight:600;letter-spacing:.08em;color:var(--faint);padding:0 26px}
+      .ticker-track span b{color:var(--cyan);font-weight:700}
+      .ticker-track span.gold b{color:var(--gold)}
+      .live-monitor{
+        margin-top:22px;text-align:left;
+        background:linear-gradient(180deg,var(--surface-2),var(--surface));
+        border:1px solid rgba(0,229,255,.22);border-radius:var(--radius);padding:28px 30px;
+      }
+      .lm-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+      .lm-live{display:inline-flex;align-items:center;gap:8px;font-family:"JetBrains Mono",monospace;font-size:.7rem;font-weight:700;letter-spacing:.18em;color:var(--green)}
+      .lm-live i{width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 12px var(--green);animation:dotPulse 1.8s ease-in-out infinite}
+      .lm-title{font-weight:800;font-size:1.12rem;letter-spacing:-.01em}
+      .lm-title .mono{color:var(--cyan)}
+      .lm-local{color:var(--faint);font-size:.88rem;margin-left:auto;font-family:"JetBrains Mono",monospace}
+      .lm-bar{height:12px;border-radius:999px;background:#04080a;border:1px solid var(--line);margin-top:18px;overflow:hidden}
+      .lm-fill{height:100%;width:0%;border-radius:999px;background:linear-gradient(90deg,#0891b2,var(--cyan));box-shadow:0 0 16px rgba(0,229,255,.55);transition:width 1s linear}
+      .lm-meta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:9px;font-family:"JetBrains Mono",monospace;font-size:.78rem;color:var(--faint)}
+      .lm-meta b{color:var(--ink);font-weight:700}
+      .lm-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px}
+      .lm-cell{background:var(--surface-3);border:1px solid var(--line-soft);border-radius:16px;padding:18px}
+      .lm-cell .k{font-size:.68rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
+      .lm-cell .v{font-family:"JetBrains Mono",monospace;font-size:1.55rem;font-weight:700;color:var(--ink);margin-top:6px;line-height:1.1;font-variant-numeric:tabular-nums}
+      .lm-cell .v.cy{color:var(--cyan)} .lm-cell .v.gd{color:var(--gold)}
+      .lm-cell .s{color:var(--muted);font-size:.84rem;margin-top:5px;line-height:1.5}
+      .lm-note{color:var(--faint);font-size:.88rem;margin:16px 0 0;line-height:1.6}
+      .lm-note b{color:var(--muted)}
+
+      /* today's rounds — real schedule table */
+      .today-table{margin-top:22px;border:1px solid var(--line-soft);border-radius:16px;overflow:hidden}
+      .today-row{display:grid;grid-template-columns:1.2fr 1.2fr 1fr auto;gap:10px;align-items:center;padding:15px 18px;background:var(--surface-3);border-bottom:1px solid var(--line-soft)}
+      .today-row:last-child{border-bottom:none}
+      .today-row .tw{font-family:"JetBrains Mono",monospace;font-weight:700;font-size:.92rem}
+      .today-row .tl2{color:var(--muted);font-size:.86rem;font-family:"JetBrains Mono",monospace}
+      .today-row .tc{color:var(--faint);font-size:.86rem}
+      .today-row .tc b{color:var(--muted)}
+      .rbadge{font-family:"JetBrains Mono",monospace;font-size:.64rem;font-weight:700;letter-spacing:.14em;border-radius:999px;padding:5px 11px;white-space:nowrap;border:1px solid var(--line);color:var(--faint)}
+      .rbadge.now{color:#02141a;background:var(--green);border-color:transparent;box-shadow:0 0 14px rgba(52,211,153,.4)}
+      .rbadge.sealed{color:var(--gold);border-color:rgba(245,196,81,.4)}
+      .today-row.is-now{background:rgba(0,229,255,.05);box-shadow:inset 3px 0 0 var(--cyan)}
+
+      /* demo activity log — the visitor's own demo scans */
+      .demo-prog{font-family:"JetBrains Mono",monospace;color:var(--cyan);font-weight:700;font-size:1rem;margin-top:12px;min-height:1.4em}
+      .demo-log{margin:22px auto 0;max-width:560px;text-align:left}
+      .demo-log h4{margin:0 0 8px;font-family:"JetBrains Mono",monospace;font-size:.7rem;font-weight:700;letter-spacing:.18em;color:var(--faint);text-transform:uppercase}
+      .demo-log-row{display:flex;align-items:center;gap:12px;padding:10px 14px;border:1px solid var(--line-soft);border-radius:12px;background:var(--surface-3);margin-top:8px;animation:demoIn .45s var(--ease)}
+      .demo-log-row .lt{font-family:"JetBrains Mono",monospace;font-size:.8rem;color:var(--faint);white-space:nowrap}
+      .demo-log-row .ln2{flex:1;font-weight:700;font-size:.92rem}
+      .demo-log-row .la{font-family:"JetBrains Mono",monospace;font-weight:700;color:var(--cyan);white-space:nowrap}
+      .demo-log-row.royal .la{color:var(--gold)}
+      .demo-log-row .ld{font-family:"JetBrains Mono",monospace;font-size:.62rem;font-weight:700;letter-spacing:.12em;color:var(--gold);border:1px solid rgba(245,196,81,.45);border-radius:999px;padding:3px 8px}
+
+      footer{border-top:1px solid var(--line-soft);margin-top:104px;padding:30px 0 44px}
+      .foot-row{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:center}
+      footer .flinks{display:flex;gap:22px;flex-wrap:wrap}
+      footer a{color:var(--muted);text-decoration:none;font-weight:600;padding:8px 2px;display:inline-block;transition:color .25s var(--ease)}
+      footer a:hover{color:var(--cyan)}
+      footer .fbrand{font-family:"Bebas Neue",sans-serif;letter-spacing:.12em;font-size:1.2rem}
+      footer .fnote{color:var(--faint);font-size:.86rem;margin-top:12px;line-height:1.6;max-width:720px}
+
+      @media (max-width:640px){
+        .wrap{padding:0 20px}
+        .hero{padding-top:18px}
+        .radar{width:min(200px,52vw)}
+        .hero-cta a.btn{width:auto}
+        .stats{grid-template-columns:repeat(2,1fr)}
+        .stat{padding:22px 8px 20px}
+        .stat + .stat{border-left:none}
+        .stat:nth-child(even){border-left:1px solid var(--line-soft)}
+        .stat:nth-child(n+3){border-top:1px solid var(--line-soft)}
+        .card{padding:24px 20px}
+        section{padding:72px 0 0}
+        footer{margin-top:72px}
+        .btn{width:100%;justify-content:center}
+        .btn.small{width:auto}
+        .row .btn.ghost{width:auto}
+        #claim .card .row .btn{width:auto}
+        .toggle{display:flex;width:100%}
+        .toggle button{flex:1}
+        .board{grid-template-columns:1fr}
+        .split-bar{flex-direction:column;min-height:0}
+        .split-seg{padding:16px 20px}
+        .timeline::before{left:88px}
+        .tl-row{grid-template-columns:70px 36px 1fr;padding:14px 0}
+        .tl-time{font-size:.92rem}
+        .faq summary{padding:18px 18px}
+        .faq .fa{padding:0 18px 20px}
+        .board-card{padding:24px 20px}
+        .demo-card{padding:28px 20px}
+        section,.demo{scroll-margin-top:210px}
+        .lm-grid{grid-template-columns:1fr}
+        .live-monitor{padding:22px 18px}
+        .lm-local{margin-left:0}
+        .today-row{grid-template-columns:1fr auto;row-gap:4px}
+        .ticker{margin:0 -20px}
+      }
+      @media (prefers-reduced-motion: reduce){
+        .emblem-sweep,.emblem-core-pulse,.hero-line,.demo-stage.scanning .demo-line,.demo-stage.scanning svg,.demo-result,.radar.core-tap svg,.live-dot.live,.ticker-track,.lm-live i{animation:none}
+        .lm-fill{transition:none}
+        section::after{animation:none;opacity:0}
+        .radar{transition:none}
+        html{scroll-behavior:auto}
+      }
+    </style>
+  </head>
+  <body>
+    <main class="wrap">
+
+      <div class="topbar">
+        <div class="brand"><svg class="mark" width="22" height="22" viewBox="0 0 200 200" aria-hidden="true"><g stroke="rgba(207,250,254,.4)" stroke-width="5" stroke-linejoin="round"><polygon points="100,10 52,54 73,76 100,50" fill="#a5f3fc"/><polygon points="100,10 100,50 127,76 148,54" fill="#67e8f9"/><polygon points="52,54 73,76 73,124 52,146" fill="#0e7490"/><polygon points="148,54 127,76 127,124 148,146" fill="#0891b2"/><polygon points="52,146 73,124 100,150 100,190" fill="#164e63"/><polygon points="148,146 127,124 100,150 100,190" fill="#155e75"/></g><polygon points="100,50 127,76 127,124 100,150 73,124 73,76" fill="#cffafe"/></svg>TALVIO&nbsp;SCAN</div>
+        <span class="utc-clock" title="Coordinated Universal Time — every round runs on this clock"><b id="utcClock">--:--:--</b> UTC</span>
+        <span class="deploy-flag" id="deployFlag">NOT DEPLOYED YET</span>
+        <nav class="topnav" aria-label="Sections">
+          <a class="nav-cta" href="#live">Live Round</a>
+          <a href="#scan">Scan</a>
+          <a href="#demo">Demo</a>
+          <a href="#myscans">My Scans</a>
+          <a href="#claim">Claim</a>
+          <a href="#how">How It Works</a>
+          <a href="#agent">Agent Prompt</a>
+          <a href="#tokenomics">Tokenomics</a>
+          <a href="#tiers">The Orbs</a>
+          <a href="#schedule">Rhythm</a>
+          <a href="#board">Board</a>
+          <a href="#roadmap">Roadmap</a>
+          <a href="#faq">FAQ</a>
+          <a href="#contracts">Contracts</a>
+          <a href="#community">The Signal</a>
+        </nav>
+      </div>
+
+      <div class="ticker" aria-hidden="true"><div class="ticker-track" id="tickerTrack">
+        <span>UTC <b class="tick-utc">--:--:--</b></span><span>ROUND NOW <b class="tick-round">—</b></span><span>SEALS IN <b class="tick-seal">--:--:--</b></span><span>FREE SCANS <b>500 / ROUND</b></span><span>PAID SCAN <b>0.002 BNB</b></span><span class="gold">ROYAL <b>250,000 $SCAN · ~3%</b></span><span>CLAIM FEE <b>0.000277 BNB</b></span><span>SUPPLY <b>10,000,000,000 $SCAN</b></span><span>CLAIMS <b>NEVER EXPIRE</b></span>
+        <span>UTC <b class="tick-utc">--:--:--</b></span><span>ROUND NOW <b class="tick-round">—</b></span><span>SEALS IN <b class="tick-seal">--:--:--</b></span><span>FREE SCANS <b>500 / ROUND</b></span><span>PAID SCAN <b>0.002 BNB</b></span><span class="gold">ROYAL <b>250,000 $SCAN · ~3%</b></span><span>CLAIM FEE <b>0.000277 BNB</b></span><span>SUPPLY <b>10,000,000,000 $SCAN</b></span><span>CLAIMS <b>NEVER EXPIRE</b></span>
+      </div></div>
+
+      <!-- HERO -->
+      <div class="hero">
+        <div class="hero-line" aria-hidden="true"></div>
+        <div class="radar-zone" aria-hidden="true">
+          <div class="radar">
+            <div class="orb-core">
+              <svg viewBox="0 0 200 200" role="img" aria-label="Talvio Scan emblem — the Scan Core crystal">
+                <defs>
+                  <radialGradient id="crystalCore" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#ffffff"/>
+                    <stop offset="38%" stop-color="#a5f3fc"/>
+                    <stop offset="76%" stop-color="#22d3ee"/>
+                    <stop offset="100%" stop-color="#0891b2"/>
+                  </radialGradient>
+                  <radialGradient id="crystalGlow" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#ecfeff" stop-opacity=".95"/>
+                    <stop offset="45%" stop-color="#22d3ee" stop-opacity=".45"/>
+                    <stop offset="100%" stop-color="#00e5ff" stop-opacity="0"/>
+                  </radialGradient>
+                </defs>
+                <!-- faint scope ring + slow sweep, kept far behind the crystal -->
+                <circle cx="100" cy="100" r="96" fill="none" stroke="#00e5ff" stroke-opacity=".10"/>
+                <circle cx="100" cy="100" r="96" fill="none" stroke="#22d3ee" stroke-opacity=".20" stroke-dasharray="1 9"/>
+                <g class="emblem-sweep">
+                  <path d="M100 100 L100 6 A94 94 0 0 1 166 33 Z" fill="#00e5ff" opacity=".06"/>
+                  <path d="M100 100 L100 6" stroke="#00e5ff" stroke-opacity=".26" stroke-width="1.5" stroke-linecap="round"/>
+                </g>
+                <!-- spark shards -->
+                <polygon points="172,28 176,39 172,50 168,39" fill="#a5f3fc"/>
+                <polygon points="26,136 29.5,145 26,154 22.5,145" fill="#22d3ee" opacity=".75"/>
+                <!-- THE SCAN CORE — faceted crystal -->
+                <g class="emblem-core-pulse" stroke-linejoin="round">
+                  <g stroke="rgba(207,250,254,.45)" stroke-width="1.2">
+                    <polygon points="100,10 52,54 73,76 100,50" fill="#a5f3fc"/>
+                    <polygon points="100,10 100,50 127,76 148,54" fill="#67e8f9"/>
+                    <polygon points="52,54 73,76 73,124 52,146" fill="#0e7490"/>
+                    <polygon points="148,54 127,76 127,124 148,146" fill="#0891b2"/>
+                    <polygon points="52,146 73,124 100,150 100,190" fill="#164e63"/>
+                    <polygon points="148,146 127,124 100,150 100,190" fill="#155e75"/>
+                  </g>
+                  <polygon points="100,50 127,76 127,124 100,150 73,124 73,76" fill="url(#crystalCore)" stroke="rgba(236,254,255,.75)" stroke-width="1.4"/>
+                  <circle cx="100" cy="100" r="30" fill="url(#crystalGlow)"/>
+                  <circle cx="100" cy="100" r="6" fill="#ffffff"/>
+                  <polygon points="100,10 148,54 148,146 100,190 52,146 52,54" fill="none" stroke="#cffafe" stroke-opacity=".85" stroke-width="2.2"/>
+                  <path d="M96 18 L79 62" stroke="#ffffff" stroke-opacity=".6" stroke-width="2" stroke-linecap="round"/>
+                </g>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <p class="core-says"><span class="core-tag">THE CORE</span><span>&ldquo;I scan. <b>You claim.</b>&rdquo;</span></p>
+
+        <h1>TALVIO <span class="scan-word">SCAN</span></h1>
+        <p class="sub">A new round every 8 hours. Three rounds a day — that's the whole game.<br />One free scan per round for Agent ID holders — mint an Orb, claim <b>$SCAN</b>.</p>
+
+        <div class="hero-cta">
+          <a class="btn" href="#scan">Scan Now</a>
+          <a class="btn ghostlink" href="#claim">Claim $SCAN</a>
+        </div>
+
+        <div class="stats" role="group" aria-label="Live scan status">
+          <div class="stat"><div class="num" id="statFree">500</div><div class="lbl" id="statFreeLbl">Free scans per round</div></div>
+          <div class="stat"><div class="num plain" id="statPhase">—</div><div class="lbl">Round (UTC)</div></div>
+          <div class="stat"><div class="num plain" id="statCountdown">--:--:--</div><div class="lbl">Next round in</div></div>
+          <div class="stat"><div class="num" id="statToday">0%</div><div class="lbl" id="statTodayLbl">Round elapsed</div></div>
+        </div>
+        <p class="stat-note" id="statNote">Free quota: 500 per round — rounds run 00–08 · 08–16 · 16–24 UTC, first come first served.</p>
+
+        <!-- LIVE ROUND MONITOR — driven by the real UTC clock, every second -->
+        <div class="live-monitor" id="live" role="group" aria-label="Live round monitor" style="scroll-margin-top:150px">
+          <div class="lm-head">
+            <span class="lm-live"><i aria-hidden="true"></i>ROUND LIVE NOW</span>
+            <span class="lm-title" id="lmTitle">Round <span class="mono">—</span></span>
+            <span class="lm-local" id="lmLocal">your time: —</span>
+          </div>
+          <div class="lm-bar"><div class="lm-fill" id="lmFill"></div></div>
+          <div class="lm-meta"><span>Elapsed <b id="lmElapsed">—</b></span><span><b id="lmPct">0%</b> of this round</span><span>Remaining <b id="lmRemain">—</b></span></div>
+          <div class="lm-grid">
+            <div class="lm-cell"><div class="k">This round seals in</div><div class="v cy" id="lmSealIn">--:--:--</div><div class="s" id="lmSealAt">—</div></div>
+            <div class="lm-cell"><div class="k">Claims for this round open in</div><div class="v" id="lmClaimIn">--:--:--</div><div class="s" id="lmClaimAt">—</div></div>
+            <div class="lm-cell"><div class="k">Previous round claims open</div><div class="v gd" id="lmPrevIn">--:--:--</div><div class="s" id="lmPrevAt">—</div></div>
+          </div>
+          <p class="lm-note" id="lmNote">The round clock above is <b>real and running right now</b> — it never stops, deployed or not. Minting switches on at deploy; the schedule you see is the schedule the contracts will run.</p>
+        </div>
+      </div>
+
+      <!-- DEMO SCAN — preview only, never touches a wallet or contract -->
+      <div class="demo" id="demo">
+        <div class="demo-card">
+          <span class="demo-badge">DEMO — NOT A REAL MINT</span>
+          <h2 class="demo-title">TRY A SCAN</h2>
+          <p class="demo-sub">This is just a preview. <b>No wallet, no transaction, nothing minted.</b> Tap the Core, watch it work, see what a scan can pay.</p>
+          <div class="demo-stage" id="demoStage" role="button" tabindex="0" aria-label="Run a demo scan">
+            <svg viewBox="0 0 200 200" aria-hidden="true">
+              <g stroke="rgba(207,250,254,.45)" stroke-width="1.2" stroke-linejoin="round">
+                <polygon points="100,10 52,54 73,76 100,50" fill="#a5f3fc"/>
+                <polygon points="100,10 100,50 127,76 148,54" fill="#67e8f9"/>
+                <polygon points="52,54 73,76 73,124 52,146" fill="#0e7490"/>
+                <polygon points="148,54 127,76 127,124 148,146" fill="#0891b2"/>
+                <polygon points="52,146 73,124 100,150 100,190" fill="#164e63"/>
+                <polygon points="148,146 127,124 100,150 100,190" fill="#155e75"/>
+              </g>
+              <polygon points="100,50 127,76 127,124 100,150 73,124 73,76" fill="#a5f3fc" stroke="rgba(236,254,255,.7)" stroke-width="1.4"/>
+              <circle cx="100" cy="100" r="7" fill="#ffffff"/>
+              <polygon points="100,10 148,54 148,146 100,190 52,146 52,54" fill="none" stroke="#cffafe" stroke-opacity=".8" stroke-width="2.2"/>
+            </svg>
+            <span class="demo-line" aria-hidden="true"></span>
+          </div>
+          <div>
+            <button class="btn" id="btnDemo" type="button">Demo Scan</button>
+          </div>
+          <div class="demo-prog" id="demoProg" aria-hidden="true"></div>
+          <div class="demo-result" id="demoResult" hidden>
+            <div class="demo-orb" id="demoOrb"></div>
+            <div class="demo-tier" id="demoTier"></div>
+            <div class="demo-amt"><span id="demoAmt"></span> <span class="unit">$SCAN</span></div>
+            <p class="demo-core-line" id="demoCoreLine"></p>
+          </div>
+          <p class="demo-tally" id="demoTally" hidden>Demo scans this visit: <b id="demoCount">0</b> · Royals found: <b id="demoRoyals">0</b> · Best Orb: <b id="demoBest">—</b></p>
+          <div class="demo-log" id="demoLog" hidden>
+            <h4>Your demo scans — this visit</h4>
+            <div id="demoLogRows"></div>
+          </div>
+          <p class="demo-note">Demo only — the Orb above is a picture, not an NFT. Real scans open at deploy.</p>
+        </div>
+      </div>
+
+      <!-- SCAN / MINT -->
+      <section id="scan">
+        <div class="sec-head"><span class="sec-num">01</span><h2>SCAN THIS ROUND</h2></div>
+        <p class="sec-desc">One free scan per round for Agent ID holders. Paid scans cost 0.002 BNB — max 10 scans per round, per wallet. That's it. Those are the rules.</p>
+
+        <div class="card">
+          <div class="row">
+            <button class="btn" id="btnConnect" type="button">Connect Wallet</button>
+            <span class="addr-chip" id="walletChip" hidden></span>
+          </div>
+          <div class="check-line"><span class="pip" id="agentPip"></span><span id="agentLine">Agent ID: connect a wallet to check. Every scan — free or paid — needs a Binance Agent ID.</span></div>
+          <div class="check-line"><span class="pip" id="freePip"></span><span id="freeLine">Free scan this round: —</span></div>
+          <div class="status-line" id="walletStatus" role="status"></div>
+        </div>
+
+        <div class="card">
+          <div class="row" style="justify-content:space-between">
+            <div class="toggle" role="group" aria-label="Scan type">
+              <button type="button" id="modeFree" aria-pressed="true">Free scan</button>
+              <button type="button" id="modePaid" aria-pressed="false">Paid scan</button>
+            </div>
+            <span class="price-note" id="modeNote">0 BNB — uses your free scan for this round.</span>
+          </div>
+          <div class="row" style="margin-top:18px">
+            <button class="btn" id="btnScan" type="button" disabled>Scan — Not Deployed Yet</button>
+            <span class="price-note" id="scanLeftNote"></span>
+          </div>
+          <div class="status-line" id="scanStatus" role="status"></div>
+        </div>
+      </section>
+
+      <!-- MY SCANS -->
+      <section id="myscans">
+        <div class="sec-head"><span class="sec-num">02</span><h2>MY SCANS</h2></div>
+        <p class="sec-desc">Your Orbs live on-chain, not in our database. Paste any wallet address — or use your connected one — and see exactly what it holds.</p>
+        <div class="card">
+          <div class="row">
+            <input class="field" id="lookupAddr" type="text" inputmode="text" autocomplete="off" spellcheck="false" placeholder="Wallet address 0x…" aria-label="Wallet address to look up" style="flex:1;min-width:220px" />
+            <button class="btn ghost" id="btnLookup" type="button">Load Scans</button>
+            <button class="btn ghost" id="btnUseMine" type="button">Use Connected</button>
+          </div>
+          <div class="status-line" id="lookupStatus" role="status"></div>
+          <div class="scan-grid" id="scanGrid"></div>
+          <p class="empty-note" id="scanEmpty">No scans loaded yet.</p>
+        </div>
+      </section>
+
+      <!-- CLAIM -->
+      <section id="claim">
+        <div class="sec-head"><span class="sec-num">03</span><h2>CLAIM $SCAN</h2></div>
+        <p class="sec-desc">Every Orb claims once. How much depends on how many agents showed up that round — the crowd sets your tier, and busy rounds pay more.</p>
+
+        <div class="tiers">
+          <div class="tier t-blue">
+            <svg width="52" height="52" viewBox="0 0 200 200" aria-hidden="true"><g stroke="rgba(224,242,254,.35)" stroke-width="2" stroke-linejoin="round"><polygon points="100,10 52,54 73,76 100,50" fill="#e0f2fe"/><polygon points="100,10 100,50 127,76 148,54" fill="#7dd3fc"/><polygon points="52,54 73,76 73,124 52,146" fill="#0369a1"/><polygon points="148,54 127,76 127,124 148,146" fill="#0284c7"/><polygon points="52,146 73,124 100,150 100,190" fill="#0c4a6e"/><polygon points="148,146 127,124 100,150 100,190" fill="#075985"/></g><polygon points="100,50 127,76 127,124 100,150 73,124 73,76" fill="#bae6fd"/><circle cx="100" cy="100" r="11" fill="#ffffff" opacity=".85"/></svg>
+            <div class="amt">2,500</div><div class="unit">$SCAN</div>
+            <div class="cond">Under 25 agents that round</div>
+          </div>
+          <div class="tier t-purple">
+            <svg width="52" height="52" viewBox="0 0 200 200" aria-hidden="true"><g stroke="rgba(207,250,254,.35)" stroke-width="2" stroke-linejoin="round"><polygon points="100,10 52,54 73,76 100,50" fill="#e0f2fe"/><polygon points="100,10 100,50 127,76 148,54" fill="#38bdf8"/><polygon points="52,54 73,76 73,124 52,146" fill="#0369a1"/><polygon points="148,54 127,76 127,124 148,146" fill="#0284c7"/><polygon points="52,146 73,124 100,150 100,190" fill="#082f49"/><polygon points="148,146 127,124 100,150 100,190" fill="#0c4a6e"/></g><polygon points="100,50 127,76 127,124 100,150 73,124 73,76" fill="#7dd3fc"/><circle cx="100" cy="100" r="11" fill="#ffffff" opacity=".85"/></svg>
+            <div class="amt">12,500</div><div class="unit">$SCAN</div>
+            <div class="cond">25 – 125 agents that round</div>
+          </div>
+          <div class="tier t-purple">
+            <svg width="52" height="52" viewBox="0 0 200 200" aria-hidden="true"><g stroke="rgba(207,250,254,.4)" stroke-width="2" stroke-linejoin="round"><polygon points="100,10 52,54 73,76 100,50" fill="#a5f3fc"/><polygon points="100,10 100,50 127,76 148,54" fill="#67e8f9"/><polygon points="52,54 73,76 73,124 52,146" fill="#0e7490"/><polygon points="148,54 127,76 127,124 148,146" fill="#0891b2"/><polygon points="52,146 73,124 100,150 100,190" fill="#164e63"/><polygon points="148,146 127,124 100,150 100,190" fill="#155e75"/></g><polygon points="100,50 127,76 127,124 100,150 73,124 73,76" fill="#a5f3fc"/><circle cx="100" cy="100" r="11" fill="#ffffff" opacity=".9"/></svg>
+            <div class="amt">60,000</div><div class="unit">$SCAN</div>
+            <div class="cond">125 – 225 agents that round · cap at 225+</div>
+          </div>
+          <div class="tier t-gold">
+            <svg width="52" height="52" viewBox="0 0 200 200" aria-hidden="true"><g stroke="rgba(254,243,199,.4)" stroke-width="2" stroke-linejoin="round"><polygon points="100,10 52,54 73,76 100,50" fill="#fef3c7"/><polygon points="100,10 100,50 127,76 148,54" fill="#fcd34d"/><polygon points="52,54 73,76 73,124 52,146" fill="#b45309"/><polygon points="148,54 127,76 127,124 148,146" fill="#d97706"/><polygon points="52,146 73,124 100,150 100,190" fill="#78350f"/><polygon points="148,146 127,124 100,150 100,190" fill="#92400e"/></g><polygon points="100,50 127,76 127,124 100,150 73,124 73,76" fill="#fde68a"/><circle cx="100" cy="100" r="11" fill="#ffffff" opacity=".9"/></svg>
+            <div class="amt">250,000</div><div class="unit">$SCAN · Royal</div>
+            <div class="cond">Royal Orb — about 3% of scans</div>
+          </div>
+        </div>
+
+        <div class="claim-facts">
+          <div class="fact"><div class="fk">ROUND END</div><div class="fv">Each round seals the moment it ends — 08:00, 16:00 or 24:00 UTC.</div></div>
+          <div class="fact"><div class="fk">+8 HOURS</div><div class="fv">Claims open 8 hours after the round ends — and never expire.</div></div>
+          <div class="fact"><div class="fk">0.000277 BNB</div><div class="fv">Claim fee per Orb. Royal Orbs pay 0.000555 BNB.</div></div>
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <div class="row">
+            <input class="field" id="claimTokenId" type="number" min="1" step="1" inputmode="numeric" placeholder="Orb Nº — e.g. 12" aria-label="Scan Orb token number to claim" style="max-width:220px" />
+            <button class="btn ghost" id="btnPreview" type="button">Check Claim</button>
+            <button class="btn gold" id="btnClaim" type="button" disabled>Claim — Not Deployed Yet</button>
+          </div>
+          <div class="status-line" id="claimStatus" role="status">Enter an Orb number to see its claim amount, fee, and opening time. You can also claim straight from My Scans.</div>
+        </div>
+      </section>
+
+      <!-- HOW -->
+      <section id="how">
+        <div class="sec-head"><span class="sec-num">04</span><h2>HOW IT WORKS</h2></div>
+        <div class="steps">
+          <div class="step"><div class="sn">1</div><h3>Scan</h3><p>Connect a wallet holding a Binance Agent ID and scan — free once per round, or 0.002 BNB per extra scan.</p></div>
+          <div class="step"><div class="sn">2</div><h3>Wait for the seal</h3><p>Your round seals the moment it ends. Claims open 8 hours later — end of the next round.</p></div>
+          <div class="step"><div class="sn">3</div><h3>Claim $SCAN</h3><p>Pay the small claim fee and collect 2,500 – 250,000 $SCAN per Orb. Claims never expire.</p></div>
+        </div>
+      </section>
+
+      <!-- AGENT PROMPT -->
+      <section id="agent">
+        <div class="sec-head"><span class="sec-num">05</span><h2>AGENT PROMPT</h2></div>
+        <p class="sec-desc">Built for agents. Paste this to yours — it scans and claims for you.</p>
+        <div class="prompt-box" id="promptText">Scan Talvio Scan for me now: call scan() on the Talvio Scan NFT — free if my free scan is left this round, otherwise paid at 0.002 BNB.
+Stay within my limit of 10 scans this round and report each tx hash and Orb number.
+When a round has sealed and its claim is open (8 hours after the round ends), call claim(orbNumber) on the Talvio Scan claim contract with the exact fee from preview().
+Report how much $SCAN I received for each claim.</div>
+        <div class="row" style="margin-top:14px">
+          <button class="btn ghost" id="btnCopyPrompt" type="button">Copy Prompt</button>
+          <span class="status-line" id="copyStatus" role="status" style="margin-top:0"></span>
+        </div>
+      </section>
+
+      <!-- TOKENOMICS -->
+      <section id="tokenomics">
+        <div class="sec-head"><span class="sec-num">06</span><h2>TOKENOMICS</h2></div>
+        <p class="sec-desc">$SCAN is fixed at <b style="color:#fff">10,000,000,000</b> — minted once at deploy, never again. Most of it belongs to the people who scan.</p>
+
+        <div class="split-bar" role="img" aria-label="Supply split: claim pool 6 billion (60 percent), liquidity 3 billion (30 percent), owner 1 billion (10 percent)">
+          <div class="split-seg seg-claim"><span class="sp">60%</span><span class="sn2">Claim pool · 6B</span></div>
+          <div class="split-seg seg-lp"><span class="sp">30%</span><span class="sn2">LP · 3B</span></div>
+          <div class="split-seg seg-owner"><span class="sp">10%</span><span class="sn2">Owner · 1B</span></div>
+        </div>
+
+        <div class="tok-legend">
+          <div class="tok-item">
+            <div class="tk"><span class="dot" style="background:#22d3ee"></span>Claim pool — 6,000,000,000</div>
+            <p class="tv">Pays every Orb claim, from the 2,500 base tier up to the <b>250,000 Royal</b>. Sits in the claim contract and only leaves through claims.</p>
+          </div>
+          <div class="tok-item">
+            <div class="tk"><span class="dot" style="background:#0e7490"></span>Liquidity — 3,000,000,000</div>
+            <p class="tv">Reserved for the <b>LP pairing</b> that makes $SCAN tradable. Pairing happens later, as its own decision — see the roadmap.</p>
+          </div>
+          <div class="tok-item">
+            <div class="tk"><span class="dot" style="background:#3f565c"></span>Owner — 1,000,000,000</div>
+            <p class="tv">The project's share for running and growing Talvio Scan. <b>No presale, no team vesting maze</b> — one wallet, visible on-chain.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- TIERS SHOWCASE -->
+      <section id="tiers">
+        <div class="sec-head"><span class="sec-num">07</span><h2>THE ORBS</h2></div>
+        <p class="sec-desc">Four kinds of Orb come out of a scan. Three pay by how busy the round was. One pays like royalty.</p>
+
+        <div class="showcase">
+          <div class="big-tier bt-blue">
+            <svg width="52" height="52" viewBox="0 0 200 200" aria-hidden="true"><g stroke="rgba(224,242,254,.35)" stroke-width="2" stroke-linejoin="round"><polygon points="100,10 52,54 73,76 100,50" fill="#e0f2fe"/><polygon points="100,10 100,50 127,76 148,54" fill="#7dd3fc"/><polygon points="52,54 73,76 73,124 52,146" fill="#0369a1"/><polygon points="148,54 127,76 127,124 148,146" fill="#0284c7"/><polygon points="52,146 73,124 100,150 100,190" fill="#0c4a6e"/><polygon points="148,146 127,124 100,150 100,190" fill="#075985"/></g><polygon points="100,50 127,76 127,124 100,150 73,124 73,76" fill="#bae6fd"/><circle cx="100" cy="100" r="11" fill="#ffffff" opacity=".85"/></svg>
+            <div class="tname">Tier 1 · Quiet round</div>
+            <div class="amt">2,500</div><div class="unit">$SCAN per Orb</div>
+            <div class="cond">Fewer than 25 unique agents scanned that round. Even the quietest round pays.</div>
+          </div>
+          <div class="big-tier bt-sky">
+            <svg width="52" height="52" viewBox="0 0 200 200" aria-hidden="true"><g stroke="rgba(207,250,254,.35)" stroke-width="2" stroke-linejoin="round"><polygon points="100,10 52,54 73,76 100,50" fill="#e0f2fe"/><polygon points="100,10 100,50 127,76 148,54" fill="#38bdf8"/><polygon points="52,54 73,76 73,124 52,146" fill="#0369a1"/><polygon points="148,54 127,76 127,124 148,146" fill="#0284c7"/><polygon points="52,146 73,124 100,150 100,190" fill="#082f49"/><polygon points="148,146 127,124 100,150 100,190" fill="#0c4a6e"/></g><polygon points="100,50 127,76 127,124 100,150 73,124 73,76" fill="#7dd3fc"/><circle cx="100" cy="100" r="11" fill="#ffffff" opacity=".85"/></svg>
+            <div class="tname">Tier 2 · Busy round</div>
+            <div class="amt">12,500</div><div class="unit">$SCAN per Orb</div>
+            <div class="cond">25 – 125 unique agents scanned that round. Five times the base tier.</div>
+          </div>
+          <div class="big-tier bt-cyan">
+            <svg width="52" height="52" viewBox="0 0 200 200" aria-hidden="true"><g stroke="rgba(207,250,254,.4)" stroke-width="2" stroke-linejoin="round"><polygon points="100,10 52,54 73,76 100,50" fill="#a5f3fc"/><polygon points="100,10 100,50 127,76 148,54" fill="#67e8f9"/><polygon points="52,54 73,76 73,124 52,146" fill="#0e7490"/><polygon points="148,54 127,76 127,124 148,146" fill="#0891b2"/><polygon points="52,146 73,124 100,150 100,190" fill="#164e63"/><polygon points="148,146 127,124 100,150 100,190" fill="#155e75"/></g><polygon points="100,50 127,76 127,124 100,150 73,124 73,76" fill="#a5f3fc"/><circle cx="100" cy="100" r="11" fill="#ffffff" opacity=".9"/></svg>
+            <div class="tname">Tier 3 · Packed round</div>
+            <div class="amt">60,000</div><div class="unit">$SCAN per Orb</div>
+            <div class="cond">125 – 225 unique agents that round. The amount caps here — at 225 and above it stays 60,000.</div>
+          </div>
+          <div class="big-tier bt-gold">
+            <svg width="52" height="52" viewBox="0 0 200 200" aria-hidden="true"><g stroke="rgba(254,243,199,.4)" stroke-width="2" stroke-linejoin="round"><polygon points="100,10 52,54 73,76 100,50" fill="#fef3c7"/><polygon points="100,10 100,50 127,76 148,54" fill="#fcd34d"/><polygon points="52,54 73,76 73,124 52,146" fill="#b45309"/><polygon points="148,54 127,76 127,124 148,146" fill="#d97706"/><polygon points="52,146 73,124 100,150 100,190" fill="#78350f"/><polygon points="148,146 127,124 100,150 100,190" fill="#92400e"/></g><polygon points="100,50 127,76 127,124 100,150 73,124 73,76" fill="#fde68a"/><circle cx="100" cy="100" r="11" fill="#ffffff" opacity=".9"/></svg>
+            <div class="tname">Royal · The rare one</div>
+            <div class="amt">250,000</div><div class="unit">$SCAN · Royal</div>
+            <div class="cond">About 3% of scans mint a Royal Orb — decided on-chain at mint, whatever the round looks like.</div>
+          </div>
+        </div>
+        <p class="tier-rule">The rule: your Orb's tier is set by <b>how many unique agents scanned in its round</b> — not by when you claim. A busy round lifts every Orb minted in it.</p>
+      </section>
+
+      <!-- SCHEDULE -->
+      <section id="schedule">
+        <div class="sec-head"><span class="sec-num">08</span><h2>THE RHYTHM</h2></div>
+        <p class="sec-desc">Talvio Scan runs on a fixed UTC clock — three 8-hour rounds a day, each sealing as it ends, claims opening one round later. Same rhythm, every day. Set your watch by it.</p>
+
+        <div class="card">
+          <div class="timeline">
+            <div class="tl-row">
+              <div class="tl-time">00 · 08<br />16 UTC</div>
+              <div class="tl-dot"></div>
+              <div class="tl-body"><h3>A new round opens</h3><p>Three 8-hour rounds a day: 00:00–08:00, 08:00–16:00 and 16:00–24:00 UTC. Each round carries <b style="color:#fff">500 free scans</b> — one free per wallet — first come first served. When the free quota runs out, paid scans stay open.</p></div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-time">8 HOURS</div>
+              <div class="tl-dot"></div>
+              <div class="tl-body"><h3>Scanning runs</h3><p>Free scan once per wallet per round, paid scans at 0.002 BNB — up to 10 scans per wallet per round. Every scan counts toward that round's unique-agent total, and that total sets everyone's tier.</p></div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-time">ROUND END</div>
+              <div class="tl-dot"></div>
+              <div class="tl-body"><h3>The round seals</h3><p>The moment a round ends — 08:00, 16:00 or 24:00 UTC — it seals: the unique-agent count locks in and every Orb's claim amount is final.</p></div>
+            </div>
+            <div class="tl-row gold">
+              <div class="tl-time">+8 HOURS</div>
+              <div class="tl-dot"></div>
+              <div class="tl-body"><h3>Claims open — forever</h3><p>Eight hours after a round ends — at the end of the next round — claims open for that round's Orbs. Scan in the 00:00 round and you claim from 16:00 the same day. No deadline after that: <b style="color:#fff">claims never expire</b>.</p></div>
+            </div>
+          </div>
+
+          <h3 style="margin:28px 0 0;font-size:1.08rem;letter-spacing:-.01em">The rounds around now — real times</h3>
+          <p style="color:var(--muted);font-size:.93rem;margin:5px 0 0;line-height:1.6">Computed from the live UTC clock, with your local time next to each window. This table updates itself as rounds roll over.</p>
+          <div class="today-table" id="todayTable" role="table" aria-label="Rounds around now"></div>
+        </div>
+      </section>
+
+      <!-- LEADERBOARD + ACTIVITY -->
+      <section id="board">
+        <div class="sec-head"><span class="sec-num">09</span><h2>ON THE BOARD</h2></div>
+        <p class="sec-desc" id="boardDesc">Top scanners and the latest Orbs, read straight from the chain. Empty for now — the first names land at launch.</p>
+
+        <div class="board">
+          <div class="board-card">
+            <h3><span class="live-dot" aria-hidden="true"></span>Top scanners this round</h3>
+            <div id="lbBody">
+            <p class="board-empty">No scans yet — the board fills from the first scan after deploy. <b>Be the first name here.</b></p>
+            <p class="board-empty" style="padding-top:2px">The round clock is already live: the current round window and seal time are ticking in the monitor at the top of this page.</p>
+            </div>
+          </div>
+          <div class="board-card">
+            <h3><span class="live-dot" aria-hidden="true"></span>Recent scans</h3>
+            <div id="feedBody">
+            <div class="feed-empty">
+              <svg width="72" height="72" viewBox="0 0 200 200" aria-hidden="true"><g stroke="rgba(207,250,254,.4)" stroke-width="3" stroke-linejoin="round"><polygon points="100,10 52,54 73,76 100,50" fill="#a5f3fc"/><polygon points="100,10 100,50 127,76 148,54" fill="#67e8f9"/><polygon points="52,54 73,76 73,124 52,146" fill="#0e7490"/><polygon points="148,54 127,76 127,124 148,146" fill="#0891b2"/><polygon points="52,146 73,124 100,150 100,190" fill="#164e63"/><polygon points="148,146 127,124 100,150 100,190" fill="#155e75"/></g><polygon points="100,50 127,76 127,124 100,150 73,124 73,76" fill="#cffafe"/></svg>
+              <p><b>No scans yet — be the first.</b><br />Every minted Orb lands here the moment its scan confirms.</p>
+            </div>
+            </div>
+          </div>
+        </div>
+        <div class="status-line" id="boardStatus" role="status"></div>
+      </section>
+
+      <!-- ROADMAP -->
+      <section id="roadmap">
+        <div class="sec-head"><span class="sec-num">10</span><h2>ROADMAP</h2></div>
+        <p class="sec-desc">Four steps, in order. No dates promised — each step ships when it's ready and verified.</p>
+        <div class="road">
+          <div class="road-step"><div class="rn">STEP 1</div><h3>Deploy contracts</h3><p>$SCAN, the Scan NFT and the claim contract go live on BNB Chain — built and tested, waiting on the deploy call.</p><span class="rstat">UP NEXT</span></div>
+          <div class="road-step"><div class="rn">STEP 2</div><h3>Launch scans</h3><p>The first rounds open, the first Orbs mint, and the board starts filling with real scanners.</p><span class="rstat later">AFTER DEPLOY</span></div>
+          <div class="road-step"><div class="rn">STEP 3</div><h3>LP pairing</h3><p>The 3B $SCAN liquidity reserve pairs with BNB so $SCAN becomes tradable. A later decision, made on its own — not bundled into launch.</p><span class="rstat later">LATER DECISION</span></div>
+          <div class="road-step"><div class="rn">STEP 4</div><h3>Claims + listing</h3><p>Sealed rounds start paying out claims, and $SCAN heads for wider listing once trading is live.</p><span class="rstat later">AFTER PAIRING</span></div>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section id="faq">
+        <div class="sec-head"><span class="sec-num">11</span><h2>QUESTIONS</h2></div>
+        <p class="sec-desc">Short answers. Exact numbers. No fine print.</p>
+        <div class="faq">
+          <details>
+            <summary>How many free scans do I get?<span class="fx" aria-hidden="true">+</span></summary>
+            <div class="fa">One free scan per wallet per round. The free pool is shared: <b>500 free scans per 8-hour round</b> (00–08 · 08–16 · 16–24 UTC), first come first served. If your round runs out, the next one opens at the next 8-hour mark — or scan paid.</div>
+          </details>
+          <details>
+            <summary>Do I need a Binance Agent ID?<span class="fx" aria-hidden="true">+</span></summary>
+            <div class="fa">Yes — <b>every scan, free or paid, requires a Binance Agent ID</b> held by the scanning wallet. The contract checks the Agent ID registry on-chain; without one, the scan reverts.</div>
+          </details>
+          <details>
+            <summary>How many scans can I do in a round?<span class="fx" aria-hidden="true">+</span></summary>
+            <div class="fa">Up to <b>10 scans per wallet per round</b> — your 1 free scan plus up to 9 paid ones. The limit resets every 8 hours, when the next round starts.</div>
+          </details>
+          <details>
+            <summary>What does a paid scan cost?<span class="fx" aria-hidden="true">+</span></summary>
+            <div class="fa"><b>0.002 BNB</b> per paid scan, plus normal network gas. The fee goes straight to the project wallet — nothing sits in the contracts.</div>
+          </details>
+          <details>
+            <summary>What does claiming cost?<span class="fx" aria-hidden="true">+</span></summary>
+            <div class="fa"><b>0.000277 BNB</b> per Orb. Royal Orbs pay <b>0.000555 BNB</b>. That's the whole cost — the $SCAN amount itself is paid out of the 6B claim pool.</div>
+          </details>
+          <details>
+            <summary>What are my chances of a Royal Orb?<span class="fx" aria-hidden="true">+</span></summary>
+            <div class="fa">About <b>3% of scans</b> mint a Royal Orb, decided on-chain at the moment of the scan. A Royal pays <b>250,000 $SCAN</b> regardless of how busy its round was.</div>
+          </details>
+          <details>
+            <summary>Do claims expire?<span class="fx" aria-hidden="true">+</span></summary>
+            <div class="fa"><b>Never.</b> A round seals the moment it ends, and claims open 8 hours later. From then on that Orb can be claimed at any time, for the same amount, forever.</div>
+          </details>
+          <details>
+            <summary>Where do the fees go?<span class="fx" aria-hidden="true">+</span></summary>
+            <div class="fa">Scan and claim fees go <b>straight to the project wallet</b> with each transaction. The contracts hold only the $SCAN claim pool — no BNB accumulates in them.</div>
+          </details>
+        </div>
+      </section>
+
+      <!-- CONTRACTS -->
+      <section id="contracts">
+        <div class="sec-head"><span class="sec-num">12</span><h2>CONTRACTS</h2></div>
+        <p class="sec-desc" id="contractDesc">Built. Tested. Not deployed yet — the moment they go live, the addresses land here and on BscScan.</p>
+        <div class="contract-list">
+          <div class="contract-row"><span class="cname">$SCAN Token</span><span class="caddr" id="addrToken">Not deployed yet</span></div>
+          <div class="contract-row"><span class="cname">Scan NFT (TSCAN)</span><span class="caddr" id="addrNft">Not deployed yet</span></div>
+          <div class="contract-row"><span class="cname">Claim</span><span class="caddr" id="addrClaim">Not deployed yet</span></div>
+          <div class="contract-row"><span class="cname">Supply</span><span class="caddr">10,000,000,000 $SCAN · 6B claim pool · 3B LP · 1B owner</span></div>
+        </div>
+      </section>
+
+      <!-- COMMUNITY -->
+      <section id="community">
+        <div class="sec-head"><span class="sec-num">13</span><h2>THE SIGNAL</h2></div>
+        <p class="sec-desc">Launch is announced on X first — the deploy, the first round, the first Orbs. Follow now and be there for scan Nº 1.</p>
+        <div class="card">
+          <div class="row" style="justify-content:space-between">
+            <div>
+              <div class="comm-handle">@TALVIOCHAIN ON X</div>
+              <p class="comm-sub">The launch post and the first scans will be announced there. No noise — just the signal.</p>
+            </div>
+            <a class="btn" href="https://x.com/Talviochain" target="_blank" rel="noopener" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center">Follow for the Launch</a>
+          </div>
+          <div class="launch-steps">
+            <div class="lstep"><span class="ln">NEXT · 1</span><h3>Deploy</h3><p>$SCAN, the Scan NFT and the claim contract go live on BNB Chain.</p></div>
+            <div class="lstep"><span class="ln">NEXT · 2</span><h3>First rounds</h3><p>Rounds open — 500 free scans per round, first come first served.</p></div>
+            <div class="lstep"><span class="ln">NEXT · 3</span><h3>First claims</h3><p>The first round seals when it ends. Claims open 8 hours later — and never expire.</p></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="wrap">
+        <div class="foot-row">
+          <span class="fbrand">TALVIO SCAN</span>
+          <nav class="flinks" aria-label="Links">
+            <a href="https://x.com/Talviochain" target="_blank" rel="noopener">X — @Talviochain</a>
+            <a href="https://bscscan.com" target="_blank" rel="noopener" id="bscLink">BscScan</a>
+            <a href="#scan">Scan</a>
+            <a href="#myscans">My Scans</a>
+            <a href="#claim">Claim</a>
+            <a href="#tokenomics">Tokenomics</a>
+            <a href="#board">Board</a>
+            <a href="#roadmap">Roadmap</a>
+            <a href="#faq">FAQ</a>
+            <a href="#contracts">Contracts</a>
+            <a href="#community">Community</a>
+          </nav>
+        </div>
+        <p class="fnote">BNB Chain · Chain ID 56. Scans need a Binance Agent ID. Mint and claim fees go straight to the project wallet — nothing sits in the contracts.</p>
+      </div>
+    </footer>
+
+    <script>
+    "use strict";
+    /* ============================================================
+       CONTRACT ADDRESSES — placeholders until deployment.
+       Contracts are built + tested but NOT deployed yet.
+       Paste the real addresses here after deploy and every
+       button, counter and BscScan link below switches on.
+       ============================================================ */
+    var SCAN_TOKEN_ADDR = "0x0000000000000000000000000000000000000000";
+    var SCAN_NFT_ADDR   = "0x0000000000000000000000000000000000000000";
+    var SCAN_CLAIM_ADDR = "0x0000000000000000000000000000000000000000";
+    var AGENT_REGISTRY  = "0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F"; // Binance Agent ID registry
+
+    var ZERO = "0x0000000000000000000000000000000000000000";
+    var DEPLOYED = SCAN_NFT_ADDR.toLowerCase() !== ZERO && SCAN_CLAIM_ADDR.toLowerCase() !== ZERO;
+
+    /* Function selectors — verified with cast sig against the built contracts */
+    var SEL = {
+      scan:               "0x7ccc3ebc", // scan()
+      claim:              "0x379607f5", // claim(uint256)
+      preview:            "0xc317c377", // preview(uint256) -> amount, fee, claimable, opensAt
+      claimOpenTime:      "0x0094c3a3", // claimOpenTime(uint256)
+      roundFreeRemaining: "0x1afc7544", // roundFreeRemaining()
+      nextTokenId:        "0x75794a3c", // nextTokenId()
+      uniqueScanners:     "0x8da0c088", // uniqueScanners(uint256 round)
+      scanRound:          "0xc7159d9c", // scanRound(uint256)
+      sealTime:           "0xb869e617", // sealTime(uint256 round)
+      isRoyal:            "0x9601ed62", // isRoyal(uint256)
+      ownerOf:            "0x6352211e", // ownerOf(uint256)
+      balanceOf:          "0x70a08231", // balanceOf(address)
+      claimed:            "0xdbe7e3bd", // claimed(uint256)
+      currentRound:       "0x8a19c8bc", // currentRound()
+      hasFreeThisRound:   "0x6f217a88", // hasFreeThisRound(address)
+      scansRemainingThisRound: "0x8a2240fb", // scansRemainingThisRound(address)
+      poolBalance:        "0x96365d44"  // poolBalance()
+    };
+
+    var BSC_RPCS = [
+      "https://bsc-dataseed.binance.org",
+      "https://bsc-dataseed1.defibit.io",
+      "https://bsc-dataseed1.ninicoin.io",
+      "https://rpc.ankr.com/bsc"
+    ];
+    var PAID_PRICE_WEI = "2000000000000000"; // 0.002 BNB
+
+    /* ---------- helpers ---------- */
+    function $(id){ return document.getElementById(id); }
+    function padUint(n){ var h = BigInt(n).toString(16); return "0".repeat(64 - h.length) + h; }
+    function padAddr(a){ return "0".repeat(24) + a.toLowerCase().replace(/^0x/, ""); }
+    function decodeUint(hex, idx){
+      if (!hex || hex === "0x") return null;
+      var s = hex.replace(/^0x/, "");
+      var chunk = s.substr(idx * 64, 64);
+      if (chunk.length < 64) return null;
+      return BigInt("0x" + chunk);
+    }
+    function fmtNum(n){ return Number(n).toLocaleString("en-US"); }
+    function fmtScan(wei){ return fmtNum(BigInt(wei) / 1000000000000000000n); }
+    function fmtBnb(wei){
+      var w = BigInt(wei);
+      var whole = w / 1000000000000000000n;
+      var frac = (w % 1000000000000000000n).toString().padStart(18, "0").replace(/0+$/, "");
+      return whole.toString() + (frac ? "." + frac : "");
+    }
+    function shortAddr(a){ return a ? a.slice(0, 6) + "…" + a.slice(-4) : ""; }
+    function isAddr(a){ return /^0x[0-9a-fA-F]{40}$/.test(a || ""); }
+    function roundLabel(round){
+      if (round === null || round === undefined) return "Round —";
+      var start = Number(round) * 28800; // round = floor(unix / 8h)
+      var d = new Date(start * 1000);
+      var date = d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
+      var sh = String(d.getUTCHours()).padStart(2, "0");
+      var eh = String((d.getUTCHours() + 8) % 24).padStart(2, "0");
+      return date + " · " + sh + ":00–" + eh + ":00 UTC";
+    }
+    function fmtUtcTime(ts){
+      var d = new Date(Number(ts) * 1000);
+      return d.toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "UTC" }) + " UTC";
+    }
+    function setStatus(el, msg, kind){
+      el.textContent = msg || "";
+      el.className = "status-line" + (kind ? " " + kind : "");
+    }
+
+    /* Read-only eth_call through public BSC RPCs, rotating on failure. */
+    var rpcIdx = 0;
+    function rpcCall(to, data){
+      var attempts = BSC_RPCS.map(function(_, i){ return BSC_RPCS[(rpcIdx + i) % BSC_RPCS.length]; });
+      var chain = Promise.reject(new Error("start"));
+      attempts.forEach(function(url){
+        chain = chain.catch(function(){
+          return fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "eth_call", params: [{ to: to, data: data }, "latest"] })
+          }).then(function(r){ return r.json(); }).then(function(j){
+            if (j.error) throw new Error(j.error.message || "RPC error");
+            rpcIdx = BSC_RPCS.indexOf(url);
+            return j.result;
+          });
+        });
+      });
+      return chain;
+    }
+    /* Batched eth_call (JSON-RPC batch) for My Scans enumeration. */
+    function rpcBatch(calls){
+      var url = BSC_RPCS[rpcIdx];
+      var body = calls.map(function(c, i){
+        return { jsonrpc: "2.0", id: i, method: "eth_call", params: [{ to: c.to, data: c.data }, "latest"] };
+      });
+      return fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      }).then(function(r){ return r.json(); }).then(function(arr){
+        var out = new Array(calls.length).fill(null);
+        (arr || []).forEach(function(j){ if (typeof j.id === "number") out[j.id] = j.error ? null : j.result; });
+        return out;
+      });
+    }
+
+    /* ---------- round clock (pure UTC time math — always live) ---------- */
+    function roundInfo(){
+      var now = Date.now();
+      var roundMs = 8 * 3600 * 1000;
+      var roundStart = Math.floor(now / roundMs) * roundMs;
+      var next = roundStart + roundMs;
+      var startH = new Date(roundStart).getUTCHours();
+      return { label: String(startH).padStart(2, "0") + ":00 – " + String(new Date(next).getUTCHours()).padStart(2, "0") + ":00", msLeft: next - now };
+    }
+    function tickClock(){
+      var p = roundInfo();
+      $("statPhase").textContent = p.label;
+      var s = Math.floor(p.msLeft / 1000);
+      var hh = String(Math.floor(s / 3600)).padStart(2, "0");
+      var mm = String(Math.floor((s % 3600) / 60)).padStart(2, "0");
+      var ss = String(s % 60).padStart(2, "0");
+      $("statCountdown").textContent = hh + ":" + mm + ":" + ss;
+    }
+    tickClock();
+    setInterval(tickClock, 1000);
+
+    /* ---------- live layer — everything below is real clock math, updated every second ---------- */
+    var ROUND_MS = 8 * 3600 * 1000;
+    function hms(ms){
+      var s = Math.max(0, Math.floor(ms / 1000));
+      return String(Math.floor(s / 3600)).padStart(2, "0") + ":" + String(Math.floor((s % 3600) / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0");
+    }
+    function hm(ms){
+      var s = Math.max(0, Math.floor(ms / 1000));
+      return String(Math.floor(s / 3600)).padStart(2, "0") + ":" + String(Math.floor((s % 3600) / 60)).padStart(2, "0");
+    }
+    function utcStr(d){ return String(d.getUTCHours()).padStart(2, "0") + ":" + String(d.getUTCMinutes()).padStart(2, "0"); }
+    function utcDayStr(d){ return d.toLocaleDateString("en-GB", { day: "numeric", month: "short", timeZone: "UTC" }); }
+    function localWin(startMs){
+      var a = new Date(startMs), b = new Date(startMs + ROUND_MS);
+      var f = function(d){ return d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" }); };
+      return f(a) + " – " + f(b) + " your time";
+    }
+    var lastRoundIdx = null;
+    function renderTodayTable(curStart){
+      var html = "";
+      for (var off = -1; off <= 2; off++){
+        var st = curStart + off * ROUND_MS;
+        var en = st + ROUND_MS;
+        var claimAt = en + ROUND_MS;
+        var state = off < 0 ? "SEALED" : (off === 0 ? "LIVE NOW" : "UPCOMING");
+        var cls = off < 0 ? "sealed" : (off === 0 ? "now" : "");
+        html += '<div class="today-row' + (off === 0 ? " is-now" : "") + '">' +
+          '<span class="tw">' + utcDayStr(new Date(st)) + " · " + utcStr(new Date(st)) + "–" + utcStr(new Date(en)) + " UTC</span>" +
+          '<span class="tl2">' + localWin(st) + "</span>" +
+          '<span class="tc">claims open <b>' + utcDayStr(new Date(claimAt)) + " " + utcStr(new Date(claimAt)) + " UTC</b></span>" +
+          '<span class="rbadge ' + cls + '">' + state + "</span></div>";
+      }
+      $("todayTable").innerHTML = html;
+    }
+    function tickLive(){
+      var now = Date.now();
+      var d = new Date(now);
+      var utc = String(d.getUTCHours()).padStart(2, "0") + ":" + String(d.getUTCMinutes()).padStart(2, "0") + ":" + String(d.getUTCSeconds()).padStart(2, "0");
+      $("utcClock").textContent = utc;
+      document.querySelectorAll(".tick-utc").forEach(function(e){ e.textContent = utc; });
+
+      var start = Math.floor(now / ROUND_MS) * ROUND_MS;
+      var end = start + ROUND_MS;
+      var elapsed = now - start;
+      var pct = Math.floor(elapsed / ROUND_MS * 100);
+      var win = utcStr(new Date(start)) + " – " + utcStr(new Date(end));
+      document.querySelectorAll(".tick-round").forEach(function(e){ e.textContent = win + " UTC"; });
+      document.querySelectorAll(".tick-seal").forEach(function(e){ e.textContent = hms(end - now); });
+
+      if (!DEPLOYED) $("statToday").textContent = pct + "%";
+
+      $("lmTitle").innerHTML = "Round <span class=\"mono\">" + utcDayStr(new Date(start)) + " · " + win + " UTC</span>";
+      $("lmLocal").textContent = localWin(start);
+      $("lmFill").style.width = (elapsed / ROUND_MS * 100).toFixed(2) + "%";
+      $("lmElapsed").textContent = hm(elapsed) + "h";
+      $("lmRemain").textContent = hm(end - now) + "h";
+      $("lmPct").textContent = pct + "%";
+      $("lmSealIn").textContent = hms(end - now);
+      $("lmSealAt").textContent = "Seals " + utcDayStr(new Date(end)) + " " + utcStr(new Date(end)) + " UTC — the unique-agent count locks and every Orb's tier is final.";
+      var claimAt = end + ROUND_MS;
+      $("lmClaimIn").textContent = hms(claimAt - now);
+      $("lmClaimAt").textContent = "Opens " + utcDayStr(new Date(claimAt)) + " " + utcStr(new Date(claimAt)) + " UTC — then never expires.";
+      var prevClaimAt = start + ROUND_MS; /* previous round ended at `start`, its claims open 8h later */
+      $("lmPrevIn").textContent = hms(prevClaimAt - now);
+      $("lmPrevAt").textContent = "The round that sealed at " + utcStr(new Date(start)) + " UTC opens its claims at " + utcDayStr(new Date(prevClaimAt)) + " " + utcStr(new Date(prevClaimAt)) + " UTC.";
+
+      var idx = Math.floor(now / ROUND_MS);
+      if (idx !== lastRoundIdx){ lastRoundIdx = idx; renderTodayTable(start); }
+    }
+    tickLive();
+    setInterval(tickLive, 1000);
+
+    /* ---------- live counters (contract reads only — never faked) ---------- */
+    function refreshCounters(){
+      if (!DEPLOYED){
+        /* Pre-deploy the hero shows real, clock-derived values — never dashes:
+           the 500 free quota from the spec, and round progress from tickLive(). */
+        $("statFree").textContent = "500";
+        $("statFreeLbl").textContent = "Free scans per round";
+        $("statNote").textContent = "Contracts not deployed yet — on-chain counters switch on at deploy. The round clock below is live now. Free quota: 500 per 8-hour round (00–08 · 08–16 · 16–24 UTC).";
+        return;
+      }
+      $("statFreeLbl").textContent = "Free left this round";
+      $("statTodayLbl").textContent = "Agents this round";
+      rpcCall(SCAN_NFT_ADDR, SEL.roundFreeRemaining).then(function(res){
+        var v = decodeUint(res, 0);
+        if (v !== null) $("statFree").textContent = fmtNum(v);
+      }).catch(function(){});
+      rpcCall(SCAN_NFT_ADDR, SEL.currentRound).then(function(res){
+        var round = decodeUint(res, 0);
+        if (round === null) return;
+        return rpcCall(SCAN_NFT_ADDR, SEL.uniqueScanners + padUint(round)).then(function(r2){
+          var v = decodeUint(r2, 0);
+          if (v !== null) $("statToday").textContent = fmtNum(v);
+        });
+      }).catch(function(){});
+    }
+    refreshCounters();
+    setInterval(refreshCounters, 60000);
+
+    /* ---------- the board — leaderboard + recent scans, read from chain ---------- */
+    function refreshBoard(){
+      if (!DEPLOYED) return;
+      document.querySelectorAll(".live-dot").forEach(function(d){ d.classList.add("live"); });
+      rpcCall(SCAN_NFT_ADDR, SEL.nextTokenId).then(function(res){
+        var next = decodeUint(res, 0);
+        if (next === null) return;
+        var total = Number(next) - 1;
+        if (total <= 0){
+          $("lbBody").innerHTML = '<p class="board-empty">No scans yet — the board fills from the first scan. <b>Be the first name here.</b></p>';
+          setStatus($("boardStatus"), "Board is live — no Orbs minted yet.", "");
+          return;
+        }
+        return rpcCall(SCAN_NFT_ADDR, SEL.currentRound).then(function(rRound){
+          var curRound = decodeUint(rRound, 0);
+          /* The NFT is not enumerable: read owner/round/royal per Orb in batches.
+             Capped at the latest 3,000 Orbs — plenty for the board. */
+          var cap = Math.min(total, 3000);
+          var ids = [];
+          for (var i = total - cap + 1; i <= total; i++) ids.push(i);
+          var meta = {};
+          var seq = Promise.resolve();
+          for (var k = 0; k < ids.length; k += 30){
+            (function(slice){
+              seq = seq.then(function(){
+                var calls = [];
+                slice.forEach(function(id){
+                  calls.push({ to: SCAN_NFT_ADDR, data: SEL.ownerOf + padUint(id) });
+                  calls.push({ to: SCAN_NFT_ADDR, data: SEL.scanRound + padUint(id) });
+                  calls.push({ to: SCAN_NFT_ADDR, data: SEL.isRoyal + padUint(id) });
+                });
+                return rpcBatch(calls).then(function(res2){
+                  slice.forEach(function(id, j){
+                    var o = res2[j * 3];
+                    var dv = decodeUint(res2[j * 3 + 1], 0);
+                    var rv = decodeUint(res2[j * 3 + 2], 0);
+                    meta[id] = {
+                      owner: o ? "0x" + o.replace(/^0x/, "").slice(24) : null,
+                      round: dv,
+                      royal: rv !== null && rv > 0n
+                    };
+                  });
+                });
+              });
+            })(ids.slice(k, k + 30));
+          }
+          return seq.then(function(){
+            /* recent scans — latest 8 Orbs */
+            var fh = "";
+            ids.slice(-8).reverse().forEach(function(id){
+              var m = meta[id];
+              if (!m || !m.owner) return;
+              fh += '<div class="feed-row"><span class="fid">Orb #' + id + '</span><span class="fown">' + shortAddr(m.owner) + "</span>" +
+                (m.royal ? '<span class="badge-royal">ROYAL</span>' : '<span class="fday">' + (m.round !== null ? roundLabel(m.round) : "") + "</span>") + "</div>";
+            });
+            if (fh) $("feedBody").innerHTML = fh;
+            /* top scanners — most Orbs minted this round */
+            var counts = {};
+            ids.forEach(function(id){
+              var m = meta[id];
+              if (m && m.owner && curRound !== null && m.round !== null && m.round === curRound){
+                var key = m.owner.toLowerCase();
+                if (!counts[key]) counts[key] = { addr: m.owner, n: 0 };
+                counts[key].n++;
+              }
+            });
+            var top = Object.keys(counts).map(function(k2){ return counts[k2]; }).sort(function(a, b){ return b.n - a.n; }).slice(0, 5);
+            if (top.length){
+              var lh = "";
+              top.forEach(function(t, i2){
+                lh += '<div class="lb-row"><span class="lb-rank">' + (i2 + 1) + '</span><span class="lb-name" style="color:var(--muted)">' + shortAddr(t.addr) + '</span><span class="lb-val" style="color:var(--ink)">' + t.n + (t.n === 1 ? " scan" : " scans") + "</span></div>";
+              });
+              $("lbBody").innerHTML = lh;
+            } else {
+              $("lbBody").innerHTML = '<p class="board-empty">No scans yet this round — the board fills from the first scan of the round. <b>Be the first name here.</b></p>';
+            }
+            setStatus($("boardStatus"), "Board read from chain · " + fmtNum(total) + " Orbs minted so far · refreshes every 2 minutes.", "ok");
+          });
+        });
+      }).catch(function(){});
+    }
+    refreshBoard();
+    setInterval(refreshBoard, 120000);
+
+    /* ---------- deployment state ---------- */
+    function applyDeployState(){
+      var flag = $("deployFlag");
+      if (DEPLOYED){
+        flag.textContent = "LIVE ON BNB CHAIN";
+        flag.classList.add("live");
+        $("btnScan").textContent = "Scan Now";
+        $("btnClaim").textContent = "Claim $SCAN";
+        $("addrToken").innerHTML = '<a href="https://bscscan.com/address/' + SCAN_TOKEN_ADDR + '" target="_blank" rel="noopener">' + SCAN_TOKEN_ADDR + "</a>";
+        $("addrNft").innerHTML = '<a href="https://bscscan.com/address/' + SCAN_NFT_ADDR + '" target="_blank" rel="noopener">' + SCAN_NFT_ADDR + "</a>";
+        $("addrClaim").innerHTML = '<a href="https://bscscan.com/address/' + SCAN_CLAIM_ADDR + '" target="_blank" rel="noopener">' + SCAN_CLAIM_ADDR + "</a>";
+        $("contractDesc").textContent = "All three contracts are live on BNB Chain. Verify them on BscScan:";
+        $("bscLink").href = "https://bscscan.com/address/" + SCAN_NFT_ADDR;
+        $("boardDesc").textContent = "Top scanners and the latest Orbs, read straight from the chain — refreshed every two minutes.";
+      } else {
+        setStatus($("scanStatus"), "Contracts are built and tested, but not deployed yet. Scanning opens the moment the addresses in the Contracts section below go live.", "warn");
+        setStatus($("lookupStatus"), "Contracts not deployed yet — My Scans goes live at deploy.", "warn");
+      }
+      updateScanButton();
+    }
+
+    /* ---------- wallet ---------- */
+    var wallet = null;
+    var scanMode = "free"; // "free" | "paid"
+    var lastPreview = null;
+
+    function hasProvider(){ return typeof window.ethereum !== "undefined"; }
+
+    function ensureChain(){
+      return window.ethereum.request({ method: "eth_chainId" }).then(function(cid){
+        if (cid === "0x38") return;
+        return window.ethereum.request({
+          method: "wallet_switchEthereumChain", params: [{ chainId: "0x38" }]
+        }).catch(function(e){
+          if (e && e.code === 4902){
+            return window.ethereum.request({
+              method: "wallet_addEthereumChain",
+              params: [{ chainId: "0x38", chainName: "BNB Smart Chain", nativeCurrency: { name: "BNB", symbol: "BNB", decimals: 18 }, rpcUrls: ["https://bsc-dataseed.binance.org"], blockExplorerUrls: ["https://bscscan.com"] }]
+            });
+          }
+          throw e;
+        });
+      });
+    }
+
+    $("btnConnect").addEventListener("click", function(){
+      if (!hasProvider()){
+        setStatus($("walletStatus"), "No wallet found in this browser. Open this page in a wallet browser (MetaMask, Trust Wallet, Binance Wallet) to connect.", "err");
+        return;
+      }
+      setStatus($("walletStatus"), "Connecting…");
+      window.ethereum.request({ method: "eth_requestAccounts" }).then(function(accs){
+        if (!accs || !accs.length) throw new Error("No account returned.");
+        wallet = accs[0];
+        return ensureChain();
+      }).then(function(){
+        $("walletChip").hidden = false;
+        $("walletChip").textContent = shortAddr(wallet);
+        $("btnConnect").textContent = "Connected";
+        setStatus($("walletStatus"), "Wallet connected on BNB Chain.", "ok");
+        checkAgent();
+        refreshWalletScanState();
+        updateScanButton();
+      }).catch(function(e){
+        setStatus($("walletStatus"), "Connect failed: " + (e && e.message ? e.message : e), "err");
+      });
+    });
+
+    if (hasProvider() && window.ethereum.on){
+      window.ethereum.on("accountsChanged", function(accs){
+        wallet = accs && accs.length ? accs[0] : null;
+        $("walletChip").hidden = !wallet;
+        if (wallet){ $("walletChip").textContent = shortAddr(wallet); checkAgent(); refreshWalletScanState(); }
+        updateScanButton();
+      });
+    }
+
+    function checkAgent(){
+      if (!wallet) return;
+      rpcCall(AGENT_REGISTRY, SEL.balanceOf + padAddr(wallet)).then(function(res){
+        var v = decodeUint(res, 0);
+        var pip = $("agentPip");
+        if (v !== null && v > 0n){
+          pip.className = "pip yes";
+          $("agentLine").textContent = "Agent ID: found in this wallet. You can scan.";
+        } else if (v !== null){
+          pip.className = "pip no";
+          $("agentLine").textContent = "Agent ID: not found in this wallet. Every scan — free or paid — needs a Binance Agent ID.";
+        }
+      }).catch(function(){
+        $("agentLine").textContent = "Agent ID: could not check right now (RPC busy). The scan itself will enforce it on-chain.";
+      });
+    }
+
+    function refreshWalletScanState(){
+      if (!wallet || !DEPLOYED) {
+        if (wallet && !DEPLOYED){
+          $("freeLine").textContent = "Free scan this round: check again after deploy.";
+        }
+        return;
+      }
+      rpcCall(SCAN_NFT_ADDR, SEL.hasFreeThisRound + padAddr(wallet)).then(function(res){
+        var v = decodeUint(res, 0);
+        var has = v !== null && v > 0n;
+        $("freePip").className = "pip " + (has ? "yes" : "no");
+        $("freeLine").textContent = has ? "Free scan this round: still available." : "Free scan this round: already used. Paid scans still open.";
+      }).catch(function(){});
+      rpcCall(SCAN_NFT_ADDR, SEL.scansRemainingThisRound + padAddr(wallet)).then(function(res){
+        var v = decodeUint(res, 0);
+        if (v !== null) $("scanLeftNote").textContent = fmtNum(v) + " of 10 scans left for this wallet this round.";
+      }).catch(function(){});
+    }
+
+    /* ---------- scan mode toggle ---------- */
+    function setMode(m){
+      scanMode = m;
+      $("modeFree").setAttribute("aria-pressed", m === "free" ? "true" : "false");
+      $("modePaid").setAttribute("aria-pressed", m === "paid" ? "true" : "false");
+      $("modeNote").textContent = m === "free"
+        ? "0 BNB — uses your free scan for this round."
+        : "0.002 BNB per scan — goes straight to the project wallet.";
+      updateScanButton();
+    }
+    $("modeFree").addEventListener("click", function(){ setMode("free"); });
+    $("modePaid").addEventListener("click", function(){ setMode("paid"); });
+
+    function updateScanButton(){
+      var b = $("btnScan");
+      if (!DEPLOYED){ b.disabled = true; b.textContent = "Scan — Not Deployed Yet"; return; }
+      b.disabled = !wallet;
+      b.textContent = wallet ? (scanMode === "free" ? "Scan Free" : "Scan — 0.002 BNB") : "Connect Wallet First";
+    }
+
+    /* ---------- scan (mint) ---------- */
+    $("btnScan").addEventListener("click", function(){
+      if (!DEPLOYED || !wallet) return;
+      var btn = $("btnScan");
+      btn.disabled = true;
+      setStatus($("scanStatus"), "Preparing your scan…");
+      ensureChain().then(function(){
+        var tx = {
+          from: wallet,
+          to: SCAN_NFT_ADDR,
+          data: SEL.scan,
+          value: scanMode === "paid" ? "0x" + BigInt(PAID_PRICE_WEI).toString(16) : "0x0"
+        };
+        return window.ethereum.request({ method: "eth_sendTransaction", params: [tx] });
+      }).then(function(hash){
+        setStatus($("scanStatus"), "Scan sent! Tx: " + hash + " — your Orb appears under My Scans once it confirms.", "ok");
+        refreshCounters();
+        setTimeout(refreshBoard, 9000);
+        refreshWalletScanState();
+      }).catch(function(e){
+        var msg = e && e.message ? e.message : String(e);
+        if (/MissingAgentId|execution reverted/i.test(msg)) msg += " — this wallet may hold no Agent ID, the free quota may be full, or this round's limit is reached.";
+        setStatus($("scanStatus"), "Scan failed: " + msg, "err");
+      }).then(function(){ btn.disabled = false; updateScanButton(); });
+    });
+
+    /* ---------- My Scans ---------- */
+    function orbSvg(royal, size){
+      var p = royal
+        ? { crownL:"#fef3c7", crownR:"#fcd34d", left:"#b45309", right:"#d97706", pavL:"#78350f", pavR:"#92400e", core1:"#ffffff", core2:"#fde68a", core3:"#f59e0b", edge:"rgba(254,243,199,.5)" }
+        : { crownL:"#a5f3fc", crownR:"#67e8f9", left:"#0e7490", right:"#0891b2", pavL:"#164e63", pavR:"#155e75", core1:"#ffffff", core2:"#a5f3fc", core3:"#22d3ee", edge:"rgba(207,250,254,.5)" };
+      var id = "og" + Math.random().toString(36).slice(2, 9);
+      function poly(pts, fill, extra){ return '<polygon points="' + pts + '" fill="' + fill + '"' + (extra || "") + "/>"; }
+      return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 200 200" aria-hidden="true"><defs><radialGradient id="' + id + '" cx="50%" cy="50%" r="50%">' +
+        '<stop offset="0%" stop-color="' + p.core1 + '"/><stop offset="45%" stop-color="' + p.core2 + '"/><stop offset="100%" stop-color="' + p.core3 + '"/></radialGradient></defs>' +
+        '<g stroke="' + p.edge + '" stroke-width="2.5" stroke-linejoin="round">' +
+        poly("100,10 52,54 73,76 100,50", p.crownL) +
+        poly("100,10 100,50 127,76 148,54", p.crownR) +
+        poly("52,54 73,76 73,124 52,146", p.left) +
+        poly("148,54 127,76 127,124 148,146", p.right) +
+        poly("52,146 73,124 100,150 100,190", p.pavL) +
+        poly("148,146 127,124 100,150 100,190", p.pavR) +
+        "</g>" +
+        poly("100,50 127,76 127,124 100,150 73,124 73,76", "url(#" + id + ")", ' stroke="' + p.edge + '" stroke-width="2"') +
+        '<circle cx="100" cy="100" r="7" fill="#ffffff"/></svg>';
+    }
+
+    function loadScans(addr){
+      var grid = $("scanGrid");
+      grid.innerHTML = "";
+      $("scanEmpty").style.display = "none";
+      if (!DEPLOYED){
+        setStatus($("lookupStatus"), "Contracts not deployed yet — My Scans goes live at deploy.", "warn");
+        $("scanEmpty").style.display = "";
+        $("scanEmpty").textContent = "Nothing to load until the contracts are deployed.";
+        return;
+      }
+      if (!isAddr(addr)){
+        setStatus($("lookupStatus"), "That doesn't look like a wallet address. Paste a full 0x… address.", "err");
+        return;
+      }
+      setStatus($("lookupStatus"), "Reading scans from chain…");
+      rpcCall(SCAN_NFT_ADDR, SEL.balanceOf + padAddr(addr)).then(function(res){
+        var bal = decodeUint(res, 0);
+        if (bal === null) throw new Error("RPC returned nothing.");
+        if (bal === 0n){
+          setStatus($("lookupStatus"), "This wallet holds no Scan Orbs yet.", "");
+          $("scanEmpty").style.display = "";
+          $("scanEmpty").textContent = "No Orbs for this wallet.";
+          return null;
+        }
+        return rpcCall(SCAN_NFT_ADDR, SEL.nextTokenId).then(function(r2){
+          var next = decodeUint(r2, 0);
+          if (next === null) throw new Error("RPC returned nothing.");
+          return { balance: bal, total: Number(next) - 1 };
+        });
+      }).then(function(info){
+        if (!info) return;
+        /* NFT is not enumerable: check ownerOf for every minted Orb, in batches. */
+        var ids = [];
+        for (var i = 1; i <= info.total; i++) ids.push(i);
+        var owned = [];
+        var CH = 60;
+        var seq = Promise.resolve();
+        ids.forEach(function(_, k){
+          if (k % CH !== 0) return;
+          var slice = ids.slice(k, k + CH);
+          seq = seq.then(function(){
+            return rpcBatch(slice.map(function(id){
+              return { to: SCAN_NFT_ADDR, data: SEL.ownerOf + padUint(id) };
+            })).then(function(results){
+              results.forEach(function(r, j){
+                if (!r) return;
+                var owner = "0x" + r.replace(/^0x/, "").slice(24);
+                if (owner.toLowerCase() === addr.toLowerCase()) owned.push(slice[j]);
+              });
+              setStatus($("lookupStatus"), "Reading scans from chain… " + owned.length + " found so far.");
+            });
+          });
+        });
+        return seq.then(function(){ return owned; });
+      }).then(function(owned){
+        if (!owned) return;
+        if (!owned.length){
+          setStatus($("lookupStatus"), "This wallet holds no Scan Orbs yet.", "");
+          $("scanEmpty").style.display = "";
+          $("scanEmpty").textContent = "No Orbs for this wallet.";
+          return;
+        }
+        setStatus($("lookupStatus"), "Found " + owned.length + " Orb" + (owned.length === 1 ? "" : "s") + ". Reading rounds and claim state…");
+        var calls = [];
+        owned.forEach(function(id){
+          calls.push({ to: SCAN_NFT_ADDR, data: SEL.scanRound + padUint(id) });
+          calls.push({ to: SCAN_NFT_ADDR, data: SEL.isRoyal + padUint(id) });
+          calls.push({ to: SCAN_CLAIM_ADDR, data: SEL.claimed + padUint(id) });
+        });
+        return rpcBatch(calls).then(function(res){
+          grid.innerHTML = "";
+          owned.forEach(function(id, i){
+            var round = decodeUint(res[i * 3], 0);
+            var royal = decodeUint(res[i * 3 + 1], 0);
+            var done = decodeUint(res[i * 3 + 2], 0);
+            var isR = royal !== null && royal > 0n;
+            var isC = done !== null && done > 0n;
+            var div = document.createElement("div");
+            div.className = "scan-item" + (isR ? " royal" : "");
+            div.innerHTML = orbSvg(isR, 56) +
+              '<div class="sid">Orb #' + id + "</div>" +
+              '<div class="smeta">' + (round !== null ? roundLabel(round) : "Round —") + "</div>" +
+              (isR ? '<span class="badge-royal">ROYAL</span>' : "") +
+              (isC ? '<span class="badge-claimed">CLAIMED</span>' :
+                '<div class="sclaim"><button class="btn small ' + (isR ? "gold" : "") + '" type="button" data-claim="' + id + '">Claim</button></div>');
+            grid.appendChild(div);
+          });
+          setStatus($("lookupStatus"), owned.length + " Orb" + (owned.length === 1 ? "" : "s") + " loaded.", "ok");
+          grid.querySelectorAll("[data-claim]").forEach(function(b){
+            b.addEventListener("click", function(){
+              $("claimTokenId").value = b.getAttribute("data-claim");
+              checkClaim(true);
+              document.getElementById("claim").scrollIntoView({ behavior: "smooth" });
+            });
+          });
+        });
+      }).catch(function(e){
+        setStatus($("lookupStatus"), "Could not read scans: " + (e && e.message ? e.message : e), "err");
+      });
+    }
+
+    $("btnLookup").addEventListener("click", function(){ loadScans($("lookupAddr").value.trim()); });
+    $("lookupAddr").addEventListener("keydown", function(e){ if (e.key === "Enter") loadScans($("lookupAddr").value.trim()); });
+    $("btnUseMine").addEventListener("click", function(){
+      if (!wallet){ setStatus($("lookupStatus"), "Connect your wallet first — or paste an address.", "warn"); return; }
+      $("lookupAddr").value = wallet;
+      loadScans(wallet);
+    });
+
+    /* ---------- claim ---------- */
+    function checkClaim(autoClaim){
+      var raw = $("claimTokenId").value.trim();
+      var id = parseInt(raw, 10);
+      lastPreview = null;
+      $("btnClaim").disabled = true;
+      if (!DEPLOYED){
+        setStatus($("claimStatus"), "Contracts not deployed yet — claims open after deploy.", "warn");
+        return;
+      }
+      if (!id || id < 1){
+        setStatus($("claimStatus"), "Enter a valid Orb number first.", "err");
+        return;
+      }
+      setStatus($("claimStatus"), "Checking Orb #" + id + " on-chain…");
+      rpcCall(SCAN_CLAIM_ADDR, SEL.preview + padUint(id)).then(function(res){
+        var amount = decodeUint(res, 0);
+        var fee = decodeUint(res, 1);
+        var claimable = decodeUint(res, 2);
+        var opensAt = decodeUint(res, 3);
+        if (amount === null || fee === null || opensAt === null) throw new Error("That Orb may not exist yet.");
+        lastPreview = { id: id, amount: amount, fee: fee, claimable: claimable > 0n, opensAt: Number(opensAt), sealAt: Number(opensAt) - 28800 };
+        return rpcCall(SCAN_NFT_ADDR, SEL.scanRound + padUint(id)).then(function(rR){
+          var round = decodeUint(rR, 0);
+          if (round === null) return null;
+          lastPreview.round = round;
+          return rpcCall(SCAN_CLAIM_ADDR, SEL.sealTime + padUint(round)).then(function(rS){
+            var sv = decodeUint(rS, 0);
+            if (sv !== null && sv > 0n) lastPreview.sealAt = Number(sv);
+          }).catch(function(){});
+        }).then(function(){
+        return rpcCall(SCAN_CLAIM_ADDR, SEL.claimed + padUint(id)).then(function(r2){
+          var done = decodeUint(r2, 0);
+          lastPreview.claimedAlready = done !== null && done > 0n;
+          return rpcCall(SCAN_NFT_ADDR, SEL.isRoyal + padUint(id));
+        }).then(function(r3){
+          var royal = decodeUint(r3, 0);
+          lastPreview.royal = royal !== null && royal > 0n;
+          renderPreview();
+          if (autoClaim && lastPreview.claimable && !lastPreview.claimedAlready) doClaim();
+        });
+        });
+      }).catch(function(e){
+        setStatus($("claimStatus"), "Check failed: " + (e && e.message ? e.message : e), "err");
+      });
+    }
+    function renderPreview(){
+      var p = lastPreview;
+      if (!p) return;
+      var openStr = fmtUtcTime(p.opensAt);
+      var sealStr = p.sealAt ? fmtUtcTime(p.sealAt) : null;
+      var txt = "Orb #" + p.id + (p.royal ? " · ROYAL" : "") + " — claim " + fmtScan(p.amount) + " $SCAN · fee " + fmtBnb(p.fee) + " BNB" + (sealStr ? " · round seals " + sealStr : "") + " · claims open " + openStr + ".";
+      if (p.claimedAlready){
+        setStatus($("claimStatus"), txt + " Already claimed.", "warn");
+        $("btnClaim").disabled = true;
+      } else if (p.claimable){
+        setStatus($("claimStatus"), txt + " Claim is open — it never expires.", "ok");
+        $("btnClaim").disabled = !wallet;
+        if (!wallet) setStatus($("claimStatus"), txt + " Connect your wallet to claim.", "ok");
+      } else {
+        setStatus($("claimStatus"), txt + " Not open yet.", "warn");
+        $("btnClaim").disabled = true;
+      }
+    }
+    $("btnPreview").addEventListener("click", function(){ checkClaim(false); });
+    $("claimTokenId").addEventListener("keydown", function(e){ if (e.key === "Enter") checkClaim(false); });
+
+    function doClaim(){
+      var p = lastPreview;
+      if (!p || !wallet || !DEPLOYED) return;
+      var btn = $("btnClaim");
+      btn.disabled = true;
+      setStatus($("claimStatus"), "Preparing claim for Orb #" + p.id + "…");
+      ensureChain().then(function(){
+        var tx = {
+          from: wallet,
+          to: SCAN_CLAIM_ADDR,
+          data: SEL.claim + padUint(p.id),
+          value: "0x" + p.fee.toString(16)
+        };
+        return window.ethereum.request({ method: "eth_sendTransaction", params: [tx] });
+      }).then(function(hash){
+        setStatus($("claimStatus"), "Claim sent for Orb #" + p.id + "! Tx: " + hash + " — " + fmtScan(p.amount) + " $SCAN on the way once it confirms.", "ok");
+      }).catch(function(e){
+        setStatus($("claimStatus"), "Claim failed: " + (e && e.message ? e.message : e), "err");
+        btn.disabled = false;
+      });
+    }
+    $("btnClaim").addEventListener("click", doClaim);
+
+    /* ---------- copy prompt ---------- */
+    $("btnCopyPrompt").addEventListener("click", function(){
+      var text = $("promptText").textContent;
+      function done(){ setStatus($("copyStatus"), "Copied — paste it to your agent.", "ok"); }
+      function fail(){ setStatus($("copyStatus"), "Copy blocked by the browser — select the text and copy it manually.", "err"); }
+      if (navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(done).catch(fail);
+      } else { fail(); }
+    });
+
+    /* ---------- the Core reacts: tilt + glow on desktop, pulse on tap ---------- */
+    (function(){
+      var radar = document.querySelector(".radar");
+      var hero = document.querySelector(".hero");
+      if (!radar || !hero) return;
+      var svg = radar.querySelector("svg");
+      var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      var finePointer = window.matchMedia && window.matchMedia("(pointer: fine)").matches;
+      radar.addEventListener("pointerdown", function(){
+        if (reduce) return;
+        radar.classList.remove("core-tap");
+        void radar.offsetWidth;
+        radar.classList.add("core-tap");
+        setTimeout(function(){ radar.classList.remove("core-tap"); }, 650);
+      });
+      if (reduce || !finePointer || !svg) return;
+      hero.addEventListener("pointermove", function(e){
+        var r = radar.getBoundingClientRect();
+        var cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+        var dx = (e.clientX - cx) / r.width, dy = (e.clientY - cy) / r.height;
+        dx = Math.max(-1.4, Math.min(1.4, dx));
+        dy = Math.max(-1.4, Math.min(1.4, dy));
+        radar.style.transform = "perspective(720px) rotateY(" + (dx * 7).toFixed(2) + "deg) rotateX(" + (-dy * 7).toFixed(2) + "deg)";
+        var dist = Math.min(1, Math.sqrt(dx * dx + dy * dy) / 1.4);
+        var glow = Math.round(26 + 24 * (1 - dist));
+        var alpha = (0.30 + 0.30 * (1 - dist)).toFixed(2);
+        svg.style.filter = "drop-shadow(0 0 " + glow + "px rgba(0,229,255," + alpha + "))";
+      });
+      hero.addEventListener("pointerleave", function(){
+        radar.style.transform = "";
+        svg.style.filter = "";
+      });
+    })();
+
+    /* ---------- demo scan — pure preview: no wallet, no contract, no mint ---------- */
+    (function(){
+      var stage = $("demoStage"), btn = $("btnDemo"), result = $("demoResult");
+      if (!stage || !btn || !result) return;
+      var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      var PALS = {
+        blue:  { crownL:"#e0f2fe", crownR:"#7dd3fc", left:"#0369a1", right:"#0284c7", pavL:"#0c4a6e", pavR:"#075985", core:"#bae6fd", edge:"rgba(224,242,254,.4)" },
+        sky:   { crownL:"#e0f2fe", crownR:"#38bdf8", left:"#0369a1", right:"#0284c7", pavL:"#082f49", pavR:"#0c4a6e", core:"#7dd3fc", edge:"rgba(207,250,254,.4)" },
+        cyan:  { crownL:"#a5f3fc", crownR:"#67e8f9", left:"#0e7490", right:"#0891b2", pavL:"#164e63", pavR:"#155e75", core:"#a5f3fc", edge:"rgba(207,250,254,.45)" },
+        gold:  { crownL:"#fef3c7", crownR:"#fcd34d", left:"#b45309", right:"#d97706", pavL:"#78350f", pavR:"#92400e", core:"#fde68a", edge:"rgba(254,243,199,.45)" }
+      };
+      var TIERS = [
+        { pal:"blue", w:40, name:"Tier 1 · Quiet Round", amt:"2,500", royal:false,
+          line:"The Core: &ldquo;Quiet round. <b>Still pays.</b> That's the deal — next round in 8 hours, we go again.&rdquo;" },
+        { pal:"sky", w:35, name:"Tier 2 · Busy Round", amt:"12,500", royal:false,
+          line:"The Core: &ldquo;Busy round. The crowd showed up — and <b>the crowd lifts every Orb</b>.&rdquo;" },
+        { pal:"cyan", w:22, name:"Tier 3 · Packed Round", amt:"60,000", royal:false,
+          line:"The Core: &ldquo;Packed. <b>That's the good stuff</b> — top tier, no Royal needed.&rdquo;" },
+        { pal:"gold", w:3, name:"Royal Orb · The Rare One", amt:"250,000", royal:true,
+          line:"The Core: &ldquo;<b>ROYAL.</b> Three in a hundred, whatever the round looks like. The Core bows.&rdquo;" }
+      ];
+      function demoOrbSvg(p){
+        function poly(pts, fill){ return '<polygon points="' + pts + '" fill="' + fill + '"/>'; }
+        return '<svg width="104" height="104" viewBox="0 0 200 200" aria-hidden="true"><g stroke="' + p.edge + '" stroke-width="2.5" stroke-linejoin="round">' +
+          poly("100,10 52,54 73,76 100,50", p.crownL) +
+          poly("100,10 100,50 127,76 148,54", p.crownR) +
+          poly("52,54 73,76 73,124 52,146", p.left) +
+          poly("148,54 127,76 127,124 148,146", p.right) +
+          poly("52,146 73,124 100,150 100,190", p.pavL) +
+          poly("148,146 127,124 100,150 100,190", p.pavR) +
+          "</g>" +
+          poly("100,50 127,76 127,124 100,150 73,124 73,76", p.core) +
+          '<circle cx="100" cy="100" r="8" fill="#ffffff" opacity=".9"/></svg>';
+      }
+      function pickTier(){
+        var total = 0, i;
+        for (i = 0; i < TIERS.length; i++) total += TIERS[i].w;
+        var roll = Math.random() * total;
+        for (i = 0; i < TIERS.length; i++){ roll -= TIERS[i].w; if (roll <= 0) return TIERS[i]; }
+        return TIERS[0];
+      }
+      var scanning = false;
+      var dCount = 0, dRoyals = 0, dBest = 0;
+      var progTimer = null;
+      function runDemo(){
+        if (scanning) return;
+        scanning = true;
+        btn.disabled = true;
+        btn.textContent = "Scanning…";
+        result.hidden = true;
+        result.classList.remove("royal");
+        stage.classList.add("scanning");
+        var prog = $("demoProg");
+        var dur = reduce ? 350 : 2000;
+        var t0 = Date.now();
+        prog.textContent = "SCANNING… 0%";
+        progTimer = setInterval(function(){
+          var p = Math.min(99, Math.floor((Date.now() - t0) / dur * 100));
+          prog.textContent = "SCANNING… " + p + "%";
+        }, 90);
+        setTimeout(function(){
+          clearInterval(progTimer);
+          prog.textContent = "SCAN COMPLETE · 100%";
+          var t = pickTier();
+          stage.classList.remove("scanning");
+          $("demoOrb").innerHTML = demoOrbSvg(PALS[t.pal]);
+          $("demoTier").textContent = t.name;
+          $("demoAmt").textContent = t.amt;
+          $("demoCoreLine").innerHTML = t.line;
+          if (t.royal) result.classList.add("royal");
+          dCount++;
+          if (t.royal) dRoyals++;
+          var amtNum = parseInt(t.amt.replace(/,/g, ""), 10);
+          if (amtNum > dBest) dBest = amtNum;
+          $("demoCount").textContent = dCount;
+          $("demoRoyals").textContent = dRoyals;
+          $("demoBest").textContent = dBest.toLocaleString("en-US") + " $SCAN";
+          $("demoTally").hidden = false;
+          /* session log — the visitor's own demo scans, newest first */
+          var rows = $("demoLogRows");
+          var row = document.createElement("div");
+          row.className = "demo-log-row" + (t.royal ? " royal" : "");
+          var nowT = new Date();
+          var lt = String(nowT.getHours()).padStart(2, "0") + ":" + String(nowT.getMinutes()).padStart(2, "0") + ":" + String(nowT.getSeconds()).padStart(2, "0");
+          row.innerHTML = '<span class="lt">' + lt + '</span><span class="ln2">' + t.name + '</span><span class="la">' + t.amt + ' $SCAN</span><span class="ld">DEMO</span>';
+          rows.insertBefore(row, rows.firstChild);
+          while (rows.children.length > 6) rows.removeChild(rows.lastChild);
+          $("demoLog").hidden = false;
+          result.hidden = false;
+          btn.disabled = false;
+          btn.textContent = "Scan Again — Demo";
+          scanning = false;
+        }, reduce ? 350 : 2000);
+      }
+      btn.addEventListener("click", runDemo);
+      stage.addEventListener("click", runDemo);
+      stage.addEventListener("keydown", function(e){
+        if (e.key === "Enter" || e.key === " "){ e.preventDefault(); runDemo(); }
+      });
+    })();
+
+    applyDeployState();
+    </script>
+  </body>
+</html>
