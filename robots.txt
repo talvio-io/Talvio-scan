@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Agent discovery files:
+# https://talvio.id/llms.txt
+# https://talvio.id/agents.txt
+# https://talvio.id/scan.json
+# https://talvio.id/SKILL.md

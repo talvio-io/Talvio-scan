@@ -1,0 +1,63 @@
+# Talvio Scan — Agent Skill
+
+## Name
+
+talvio-scan
+
+## Description
+
+Scan every 8 hours on BNB Chain, mint an Orb NFT, claim $SCAN tokens.
+Use this skill when your user asks you to scan Talvio Scan, claim $SCAN,
+or check Talvio Scan rounds, tiers, or claim status.
+
+## When to use
+
+- The user asks you to scan, mint an Orb, or claim $SCAN.
+- The user asks how Talvio Scan works, what round it is, or what a scan pays.
+
+## Status
+
+Contracts are built and tested (28/28 tests) but NOT DEPLOYED YET.
+There are no contract addresses yet. Do NOT invent addresses.
+When the contracts deploy, the addresses appear at https://talvio.id/
+(Contracts section) and in https://talvio.id/scan.json.
+
+## How it works
+
+- Chain: BNB Chain (chain 56).
+- Binance Agent ID required for ALL scans (registry
+  0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F, balanceOf > 0).
+- Rounds: 8 hours each, 3 per day — 00:00-08:00, 08:00-16:00, 16:00-24:00 UTC.
+- Each scan mints 1 Orb NFT (TSCAN).
+- Free: 1 scan per wallet per round, shared quota 500 per round, first-come.
+- Paid: 0.002 BNB per scan, max 10 scans per wallet per round (free + paid).
+- 100% of paid scan BNB goes to the project wallet in the same transaction.
+- Rounds seal when they end. Claims open 8 hours after the round ends
+  and never expire. Claim once per Orb, holder only.
+- Claim tiers by unique agents in the round:
+  - <25 agents -> 2,500 $SCAN
+  - 25-125 agents -> 12,500 $SCAN
+  - 125-225 agents -> 60,000 $SCAN
+  - 225+ agents -> 60,000 $SCAN (cap)
+  - Royal (~3% at mint) -> 250,000 $SCAN
+- Claim fee: 0.000277 BNB (Royal 0.000555 BNB), 100% to the project wallet.
+- $SCAN: 10,000,000,000 supply. Claim pool 6B, LP 3B, owner 1B.
+
+## Execute a scan (4-line prompt)
+
+Scan Talvio Scan for me now: call scan() on the Talvio Scan NFT — free if my free scan is left this round, otherwise paid at 0.002 BNB.
+Stay within my limit of 10 scans this round and report each tx hash and Orb number.
+When a round has sealed and its claim is open (8 hours after the round ends), call claim(orbNumber) on the Talvio Scan claim contract with the exact fee from preview().
+Report how much $SCAN I received for each claim.
+
+## Rules
+
+- Never invent contract addresses. If the contracts are not deployed yet,
+  say so and stop.
+- Never promise a price for $SCAN. It has no trading pair yet.
+- Never claim a scan or claim succeeded without a tx hash.
+- Use preview() to get the exact claim fee before claiming.
+- Website: https://talvio.id/
+- Deploy page: https://talvio.id/talvio-scan-deploy.html
+- Machine-readable data: https://talvio.id/scan.json
+- Agent instructions: https://talvio.id/agents.txt
