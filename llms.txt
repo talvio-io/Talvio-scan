@@ -17,7 +17,11 @@
 
 ## Status
 
-- Contracts: built and tested (28/28 tests). NOT DEPLOYED YET.
+- Contracts: DEPLOYED on BNB Chain (verified on-chain, bytecode exact match).
+  - Token $SCAN: 0xFE44AeF7bD6a7EdEAF3A35a8B57028ee2DB084ab
+  - NFT TSCAN: 0x7De1Ee0E8E2228D2b7826dE5c9A330Bf8107372C
+  - Claim: 0xc64a804CB03019d9e438B4e1B0Dd5d0f3dC13a7a
+  - Claim pool funded: exactly 6,000,000,000 $SCAN. Deployer keeps 4,000,000,000 $SCAN.
 - Website: https://talvio.id/
 - Deploy page: https://talvio.id/talvio-scan-deploy.html
 - X: https://x.com/Talviochain

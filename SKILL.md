@@ -17,10 +17,11 @@ or check Talvio Scan rounds, tiers, or claim status.
 
 ## Status
 
-Contracts are built and tested (28/28 tests) but NOT DEPLOYED YET.
-There are no contract addresses yet. Do NOT invent addresses.
-When the contracts deploy, the addresses appear at https://talvio.id/
-(Contracts section) and in https://talvio.id/scan.json.
+Contracts are DEPLOYED on BNB Chain (verified on-chain, bytecode exact match):
+- Token $SCAN: 0xFE44AeF7bD6a7EdEAF3A35a8B57028ee2DB084ab
+- NFT TSCAN: 0x7De1Ee0E8E2228D2b7826dE5c9A330Bf8107372C
+- Claim: 0xc64a804CB03019d9e438B4e1B0Dd5d0f3dC13a7a
+- Claim pool funded: exactly 6,000,000,000 $SCAN. Deployer keeps 4,000,000,000 $SCAN.
 
 ## How it works
 
@@ -52,8 +53,7 @@ Report how much $SCAN I received for each claim.
 
 ## Rules
 
-- Never invent contract addresses. If the contracts are not deployed yet,
-  say so and stop.
+- Use the deployed contract addresses above. Never invent other addresses.
 - Never promise a price for $SCAN. It has no trading pair yet.
 - Never claim a scan or claim succeeded without a tx hash.
 - Use preview() to get the exact claim fee before claiming.

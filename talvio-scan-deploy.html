@@ -131,6 +131,21 @@ const CLAIM_FUND = 6000000000n * 10n ** 18n;
 const $ = (id) => document.getElementById(id);
 let provider = null, signer = null, account = null;
 let tokenAddr = null, nftAddr = null, claimAddr = null;
+let fundedFlag = false;
+
+function saveAddrs() {
+  try { localStorage.setItem("talvio-scan-addrs", JSON.stringify({ token: tokenAddr, nft: nftAddr, claim: claimAddr, funded: fundedFlag })); } catch (e) {}
+}
+function restoreAddrs() {
+  try {
+    const s = JSON.parse(localStorage.getItem("talvio-scan-addrs") || "{}");
+    if (isAddr(s.token)) { tokenAddr = s.token; $("token-addr").textContent = s.token; setPill("pill-token", "Set", "live"); $("btn-deploy-nft").disabled = false; $("btn-refresh").disabled = false; }
+    if (isAddr(s.nft)) { nftAddr = s.nft; $("nft-addr").textContent = s.nft; setPill("pill-nft", "Set", "live"); $("btn-deploy-claim").disabled = false; }
+    if (isAddr(s.claim)) { claimAddr = s.claim; $("claim-addr").textContent = s.claim; setPill("pill-claim", "Set", "live"); $("btn-fund").disabled = false; $("fund-status").textContent = "Ready to fund."; }
+    if (s.funded) { fundedFlag = true; setPill("pill-fund", "Funded", "live"); $("fund-status").textContent = "Funded: 6B SCAN in the claim contract."; }
+    if (tokenAddr || nftAddr || claimAddr) log("Restored saved addresses — no need to paste them again.", "ok");
+  } catch (e) {}
+}
 
 function log(msg, cls) {
   const el = $("log");
@@ -190,6 +205,7 @@ async function deployToken() {
   $("btn-deploy-token").disabled = true;
   try {
     tokenAddr = await deployOne(ART_TOKEN, [], "TalvioScanToken");
+    saveAddrs();
     $("token-addr").textContent = tokenAddr;
     setPill("pill-token", "Deployed", "live");
     $("btn-deploy-nft").disabled = false;
@@ -202,6 +218,7 @@ async function deployNft() {
   $("btn-deploy-nft").disabled = true;
   try {
     nftAddr = await deployOne(ART_NFT, [REGISTRY], "TalvioScanNFT");
+    saveAddrs();
     $("nft-addr").textContent = nftAddr;
     setPill("pill-nft", "Deployed", "live");
     $("btn-deploy-claim").disabled = false;
@@ -213,6 +230,7 @@ async function deployClaim() {
   $("btn-deploy-claim").disabled = true;
   try {
     claimAddr = await deployOne(ART_CLAIM, [tokenAddr, nftAddr], "TalvioScanClaim");
+    saveAddrs();
     $("claim-addr").textContent = claimAddr;
     setPill("pill-claim", "Deployed", "live");
     $("btn-fund").disabled = false;
@@ -232,6 +250,7 @@ async function fundClaim() {
     log("Fund tx: " + tx.hash);
     await tx.wait();
     log("Claim pool funded: 6B SCAN. Deployer keeps 4B SCAN (3B LP + 1B owner).", "ok");
+    fundedFlag = true; saveAddrs();
     setPill("pill-fund", "Funded", "live");
     $("fund-status").textContent = "Funded: 6B SCAN in the claim contract.";
   } catch (e) { log("Fund failed: " + (e && e.message ? e.message : e), "err"); $("btn-fund").disabled = false; }
@@ -271,6 +290,7 @@ function useAddr(inputId, kind) {
   if (kind === "token") { tokenAddr = v; $("token-addr").textContent = v; setPill("pill-token", "Set", "live"); $("btn-deploy-nft").disabled = false; $("btn-refresh").disabled = false; log("Token set: " + v, "ok"); }
   if (kind === "nft") { nftAddr = v; $("nft-addr").textContent = v; setPill("pill-nft", "Set", "live"); $("btn-deploy-claim").disabled = false; log("NFT set: " + v, "ok"); }
   if (kind === "claim") { claimAddr = v; $("claim-addr").textContent = v; setPill("pill-claim", "Set", "live"); $("btn-fund").disabled = false; $("fund-status").textContent = "Ready to fund."; log("Claim set: " + v, "ok"); }
+  saveAddrs();
 }
 
 $("btn-connect").addEventListener("click", connect);
@@ -283,6 +303,7 @@ $("btn-refresh").addEventListener("click", refresh);
 $("btn-use-token").addEventListener("click", () => useAddr("in-token", "token"));
 $("btn-use-nft").addEventListener("click", () => useAddr("in-nft", "nft"));
 $("btn-use-claim").addEventListener("click", () => useAddr("in-claim", "claim"));
+restoreAddrs();
 </script>
 </body>
 </html>
