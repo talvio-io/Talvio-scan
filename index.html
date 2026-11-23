@@ -710,14 +710,22 @@
       <!-- AGENT PROMPT -->
       <section id="agent">
         <div class="sec-head"><span class="sec-num">05</span><h2>AGENT PROMPT</h2></div>
-        <p class="sec-desc">Built for agents. Paste this to yours — it scans and claims for you.</p>
+        <p class="sec-desc">Built for agents. Two prompts — one to scan, one to claim. Paste the one you need.</p>
+        <h3 style="margin:18px 0 8px;font-size:.85rem;letter-spacing:.14em;color:var(--cyan)">SCAN</h3>
         <div class="prompt-box" id="promptText">On BNB Chain (chain 56), scan Talvio Scan for me now: call scan() on the Talvio Scan NFT at 0x7De1Ee0E8E2228D2b7826dE5c9A330Bf8107372C — free if my free scan is left this round, otherwise paid at 0.002 BNB.
-Stay within my limit of 10 scans this round and report each tx hash and Orb number.
-When a round has sealed and its claim is open (8 hours after the round ends), call claim(orbNumber) on the Talvio Scan claim contract at 0xc64a804CB03019d9e438B4e1B0Dd5d0f3dC13a7a with the exact fee from preview().
-Report how much $SCAN I received for each claim.</div>
+Stay within my limit of 10 scans this round and report each tx hash and Orb number.</div>
         <div class="row" style="margin-top:14px">
-          <button class="btn ghost" id="btnCopyPrompt" type="button">Copy Prompt</button>
+          <button class="btn ghost" id="btnCopyPrompt" type="button">Copy Scan Prompt</button>
           <span class="status-line" id="copyStatus" role="status" style="margin-top:0"></span>
+        </div>
+        <h3 style="margin:26px 0 8px;font-size:.85rem;letter-spacing:.14em;color:var(--gold)">CLAIM</h3>
+        <div class="prompt-box" id="promptClaimText">Claim my Talvio Scan $SCAN now on BNB Chain (chain 56): first find all my TSCAN Orbs — check ownerOf(1) to ownerOf(nextTokenId-1) on the NFT at 0x7De1Ee0E8E2228D2b7826dE5c9A330Bf8107372C and list only the ones I own.
+For each Orb I own, call preview(orbId) on the claim contract at 0xc64a804CB03019d9e438B4e1B0Dd5d0f3dC13a7a — claim only the ones where claimable is true, skip the rest and tell me when each one opens.
+Call claim(orbId) for each claimable Orb, paying the exact fee from preview() as the transaction value (0.000277 BNB, Royal 0.000555 BNB).
+Report each Orb number, how much $SCAN I received, and its tx hash. Do not scan again.</div>
+        <div class="row" style="margin-top:14px">
+          <button class="btn ghost" id="btnCopyClaimPrompt" type="button">Copy Claim Prompt</button>
+          <span class="status-line" id="copyClaimStatus" role="status" style="margin-top:0"></span>
         </div>
       </section>
 
@@ -1660,6 +1668,14 @@ Report how much $SCAN I received for each claim.</div>
       var text = $("promptText").textContent;
       function done(){ setStatus($("copyStatus"), "Copied — paste it to your agent.", "ok"); }
       function fail(){ setStatus($("copyStatus"), "Copy blocked by the browser — select the text and copy it manually.", "err"); }
+      if (navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(done).catch(fail);
+      } else { fail(); }
+    });
+    $("btnCopyClaimPrompt").addEventListener("click", function(){
+      var text = $("promptClaimText").textContent;
+      function done(){ setStatus($("copyClaimStatus"), "Copied — paste it to your agent.", "ok"); }
+      function fail(){ setStatus($("copyClaimStatus"), "Copy blocked by the browser — select the text and copy it manually.", "err"); }
       if (navigator.clipboard && navigator.clipboard.writeText){
         navigator.clipboard.writeText(text).then(done).catch(fail);
       } else { fail(); }
