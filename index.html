@@ -710,11 +710,12 @@
       <!-- AGENT PROMPT -->
       <section id="agent">
         <div class="sec-head"><span class="sec-num">05</span><h2>AGENT PROMPT</h2></div>
-        <p class="sec-desc">Built for agents. Two prompts — one to scan, one to claim. Paste the one you need.</p>
-        <h3 style="margin:18px 0 8px;font-size:.85rem;letter-spacing:.14em;color:var(--cyan)">SCAN</h3>
-        <div class="prompt-box" id="promptText">On BNB Chain (chain 56), scan Talvio Scan for me now: call scan() on the Talvio Scan NFT at 0x7De1Ee0E8E2228D2b7826dE5c9A330Bf8107372C — free if my free scan is left this round, otherwise paid at 0.002 BNB.
-Stay within my limit of 10 scans this round and report each tx hash and Orb number.
-Each Orb's claim opens 8 hours after its round ends — call preview(orbId) on the claim contract at 0xc64a804CB03019d9e438B4e1B0Dd5d0f3dC13a7a for every Orb and tell me its opensAt (UTC), so I can run the CLAIM prompt then.</div>
+        <p class="sec-desc">Built for agents. One standing order: every run starts with the claim sweep, then scans — claims open exactly at round boundaries, so a scanning agent is already there to collect them. The claim prompt below stays as a standalone backup.</p>
+        <h3 style="margin:18px 0 8px;font-size:.85rem;letter-spacing:.14em;color:var(--cyan)">SCAN — WITH CLAIM SWEEP (STANDING ORDER)</h3>
+        <div class="prompt-box" id="promptText">STANDING ORDER — run this at the start of every Talvio Scan run, ideally at a round boundary (00:00 / 08:00 / 16:00 UTC).
+STEP 0 — CLAIM SWEEP FIRST: find all my TSCAN Orbs in https://talvio.id/orbs.json (check generatedAtUtc — the file can lag the chain; also check ownerOf() for Orb numbers above its nextTokenId). For each Orb I own, call preview(orbId) on the claim contract at 0xc64a804CB03019d9e438B4e1B0Dd5d0f3dC13a7a — it returns (amount, fee, claimable, opensAt). Call claim(orbId) for every claimable Orb, paying the exact fee from preview() as the transaction value (0.000277 BNB, Royal 0.000555 BNB). Paying a claim fee is a claim, not a purchase. Keep at least 0.005 BNB in my wallet for claim fees and gas; if my BNB cannot cover the fees plus that buffer, skip claiming and report OPERATOR: TOP UP CLAIM BUFFER.
+STEP 1 — SCAN: on BNB Chain (chain 56), call scan() on the Talvio Scan NFT at 0x7De1Ee0E8E2228D2b7826dE5c9A330Bf8107372C — free if my free scan is left this round, otherwise paid at 0.002 BNB. Stay within my limit of 10 scans this round.
+STEP 2 — REPORT: every Orb scanned (number + tx hash) and its opensAt (UTC) from preview(); every Orb claimed in the sweep (number, $SCAN received, tx hash); and totals — $SCAN claimed this run, $SCAN still waiting (claimable + not yet open), and my $SCAN balance.</div>
         <div class="row" style="margin-top:14px">
           <button class="btn ghost" id="btnCopyPrompt" type="button">Copy Scan Prompt</button>
           <span class="status-line" id="copyStatus" role="status" style="margin-top:0"></span>
@@ -722,13 +723,13 @@ Each Orb's claim opens 8 hours after its round ends — call preview(orbId) on t
         <h3 style="margin:26px 0 8px;font-size:.85rem;letter-spacing:.14em;color:var(--gold)">CLAIM</h3>
         <div class="prompt-box" id="promptClaimText">Claim my Talvio Scan $SCAN now on BNB Chain (chain 56): find all my TSCAN Orbs in https://talvio.id/orbs.json — look up my wallet there; also check ownerOf() only for Orb numbers above the file's nextTokenId.
 For each Orb I own, call preview(orbId) on the claim contract at 0xc64a804CB03019d9e438B4e1B0Dd5d0f3dC13a7a — it returns (amount, fee, claimable, opensAt); claimable=true means claim now, false means wait until opensAt (UTC).
-Call claim(orbId) for each claimable Orb, paying the exact fee from preview() as the transaction value (0.000277 BNB, Royal 0.000555 BNB).
-Report each Orb number, how much $SCAN I received, and its tx hash; for unclaimable Orbs report only the Orb number and its opensAt (UTC). Do not scan again.</div>
+Call claim(orbId) for each claimable Orb, paying the exact fee from preview() as the transaction value (0.000277 BNB, Royal 0.000555 BNB). Paying a claim fee is a claim, not a purchase. If my BNB cannot cover the fees, report OPERATOR: TOP UP CLAIM BUFFER and stop.
+Report each Orb number, how much $SCAN I received, and its tx hash; for unclaimable Orbs report only the Orb number and its opensAt (UTC). End with totals: $SCAN claimed this run, $SCAN still waiting, and my $SCAN balance. Do not scan again.</div>
         <div class="row" style="margin-top:14px">
           <button class="btn ghost" id="btnCopyClaimPrompt" type="button">Copy Claim Prompt</button>
           <span class="status-line" id="copyClaimStatus" role="status" style="margin-top:0"></span>
         </div>
-        <p class="status-line" style="margin-top:10px">Orb lookup for agents: <a href="/orbs.json" style="color:var(--gold)">orbs.json</a> — every wallet's Orbs, refreshed from the chain (check generatedAtUtc inside the file).</p>
+        <p class="status-line" style="margin-top:10px">Orb lookup for agents: <a href="/orbs.json" style="color:var(--gold)">orbs.json</a> — every wallet's Orbs (check generatedAtUtc inside the file — it can lag the chain, so verify with ownerOf() / preview() before trusting it).</p>
       </section>
 
       <!-- TOKENOMICS -->
